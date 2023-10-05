@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Group 15</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+        integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+        crossorigin="anonymous"></script>
+    <script src="//unpkg.com/alpinejs" defer></script>
+    <script src="/static/scripts.js"></script>
+    <style>
+        body {
+            background-color: #dad7cd;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+    </style>
+</head>
+
+<body x-data="prediction">
+
+    <div class="wrapper">
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-light">
+                <div class="container">
+                    <a class="navbar-brand bg-transparent" href="#">
+                        <img src="/static/images/Green_Nature_Logo-removebg-preview.png" style="background-color: #fff;"
+                            alt="Logo" width="50" height="50" class="d-inline-block px-1 align-text-top">
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item me-3">
+                                <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+                            </li>
+                            <li class="nav-item me-3">
+                                <a class="nav-link" href="{{ url_for('about_us') }}">About Us</a>
+                            </li>
+                            <li class="nav-item me-3">
+                                <a class="nav-link" href="{{ url_for('predict') }}">Soil Prediction</a>
+                            </li>
+                            <li class="nav-item me-3">
+                                <a class="nav-link" href=" ">Map</a>
+                            </li>
+                            <li class="nav-item me-3">
+                                <a class="nav-link" href="{{ url_for('soil_quality_standards') }}">Soil Quality
+                                    Standards</a>
+                            </li>
+                            <li class="nav-item me-3">
+                                <a class="nav-link" href="{{ url_for('contact_us') }}">Contact Us</a>
+                            </li>
+                            <li class="my-auto nav-item me-3">
+                                <form action="/logout">
+                                    <input type="submit" class="btn btn-sm fw-bold btn-danger" value="Logout">
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+    </div>
+
+    <section class="container">
+        <div class="row">
+            <div class="col-md-8 mt-5 mb-auto text-right px-5">
+                <h2 class="section-title">Thato Kgasago</h2>
+                <div class="person-info">
+                    <strong>Qualifications:</strong> BSc, BSc Honours, and currently pursuing MSc<br>
+                    <strong>Other interests:</strong> Poetry, Debate, and Spelling Bee<br>
+                    <strong>Interesting fact:</strong> She is ambidextrous<br>
+                    <strong>Proud moments:</strong> When her poem was published<br>
+                    <strong>Career path:</strong> Aspiring Sustainability and Energy Consultant<br>
+                </div>
+            </div>
+            <div class="col-md-4 py-5">
+                <img src="/static/images/IMG_2023.jpg" alt="Image of Thato" class="person-image">
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <div class="col-md-4 py-5">
+                <img src="/static/images/moses.jpg" alt="Image of Moses" class="person-image">
+            </div>
+
+            <div class="col-md-8 mt-5 mb-auto text-right px-5">
+                <h2 class="section-title">Moses Moletsane</h2>
+                <div class="person-info">
+                    My name is Moses Moletsane, and I completed my BS Honours in Geography degree at the University of
+                    Johannesburg.
+                    I am an MSc Candidate in Geography at the University of Johannesburg. During my time at the
+                    University of Johannesburg,
+                    I actively participated in Community Engagement. Additionally, I successfully completed three short
+                    online courses:
+                    Green Economy and Trade, Introduction to Sustainable Finance, and Cities and Climate Change. My
+                    long-term career goal
+                    is to work as an Environmental Scientist, contributing to my own Environmental Management company.
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <div class="col-md-8 py-5">
+                <h2 class="section-title">Amogelang Monnanyana</h2>
+                <div class="person-info">
+                    I am a dedicated civil engineering graduate with an unwavering commitment to academic growth, a
+                    profound passion for
+                    art and technology, and a steadfast dedication to advancing education. These facets of my identity
+                    collectively shape
+                    my pursuit of knowledge and underscore my mission to make a positive impact in the world.
+                </div>
+            </div>
+
+            <div class="col-md-4 mt-2 mb-auto text-right py-5">
+                <img src="/static/images/Amo.jpg" alt="Image of Amogelang" class="person-image">
+            </div>
+        </div>
+    </section>
+
+
+    <footer class="footer">
+        <div class="container">
+            <p>Find us on:</p>
+
+            <div class="social-icons">
+                <a href="#" class="btn btn-outline-primary btn-lg"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" class="btn btn-outline-primary btn-lg me-2"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="btn btn-outline-info btn-lg me-2"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="btn btn-outline-danger btn-lg me-2"><i class="fab fa-instagram"></i></a>
+            </div>
+
+            <p>All Rights Reserved | Capstone Project Group 15</p>
+        </div>
+    </footer>
+</body>
+
+</html>

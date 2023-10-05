@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GROUP 15: CAPSTONE PROJECT</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+        integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+        crossorigin="anonymous"></script>
+    <script src="//unpkg.com/alpinejs" defer></script>
+    <script src="/static/scripts.js"></script>
+    <style>
+        body {
+            background-color: #dad7cd;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+    </style>
+</head>
+
+<body x-data="prediction">
+
+    <div class="wrapper">
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-light">
+                <div class="container">
+                    <a class="navbar-brand bg-transparent" href="#">
+                        <img src="/static/images/Green_Nature_Logo-removebg-preview.png" style="background-color: #fff;"
+                            alt="Logo" width="50" height="50" class="d-inline-block px-1 align-text-top">
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item me-3">
+                                <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+                            </li>
+                            <li class="nav-item me-3">
+                                <a class="nav-link" href="{{ url_for('about_us') }}">About Us</a>
+                            </li>
+                            <li class="nav-item me-3">
+                                <a class="nav-link" href="{{ url_for('predict') }}">Soil Prediction</a>
+                            </li>
+                            <li class="nav-item me-3">
+                                <a class="nav-link" href=" ">Map</a>
+                            </li>
+                            <li class="nav-item me-3">
+                                <a class="nav-link" href="{{ url_for('soil_quality_standards') }}">Soil Quality
+                                    Standards</a>
+                            </li>
+                            <li class="nav-item me-3">
+                                <a class="nav-link" href="{{ url_for('contact_us') }}">Contact Us</a>
+                            </li>
+                            <li class="my-auto nav-item me-3">
+                                <form action="/logout">
+                                    <input type="submit" class="btn btn-sm fw-bold btn-danger" value="Logout">
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+    </div>
+
+    <div class="container">
+        <h2 class="my-3">About Soil Quality Standards</h2>
+
+        <p style="text-align: justify;" class="my-3">The Minister of Water and Environmental Affairs has drafted
+            national norms and standards for the remediation of contaminated land and soil quality in the Republic of
+            South Africa, under section 7 (2) (d) read with section 73 (1) (a) of the National Environmental Management:
+            Waste Act (Act No. 59 of 2008). These standards are designed to provide a uniform national approach to the
+            remediation of contaminated land and soil quality. They aim to limit uncertainties about assessment criteria
+            and methods, as well as establish minimum standards for necessary environmental protection measures during
+            remediation activities. The norms and standards apply to any person
+            who undertakes any remediation activity within South Africa.</p>
+
+        <p style="text-align: justify;" class="my-3">Here is a table that provides an overview of the soil screening
+            values for metals and organics as part of
+            these soil quality standards <em><b>for RSA</b></em>:</p>
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">Parameter</th>
+                        <th scope="col">Units</th>
+                        <th scope="col">All Land-Uses</th>
+                        <th scope="col">Informal Residential</th>
+                        <th scope="col">Standard Residential</th>
+                        <th scope="col">Commercial/Industrial</th>
+                        <th scope="col">Protection of Ecosystem Health</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Arsenic</td>
+                        <td>mg/kg</td>
+                        <td>5.8</td>
+                        <td>23</td>
+                        <td>47</td>
+                        <td>150</td>
+                        <td>580</td>
+                    </tr>
+                    <tr>
+                        <td>Cadmium</td>
+                        <td>mg/kg</td>
+                        <td>7.5</td>
+                        <td>15</td>
+                        <td>32</td>
+                        <td>260</td>
+                        <td>37</td>
+                    </tr>
+                    <tr>
+                        <td>Chromium (III)</td>
+                        <td>mg/kg</td>
+                        <td>46,000</td>
+                        <td>46,000</td>
+                        <td>96,000</td>
+                        <td>790,000</td>
+                        <td>n/a</td>
+                    </tr>
+                    <tr>
+                        <td>Chromium (VI)</td>
+                        <td>mg/kg</td>
+                        <td>6.5</td>
+                        <td>6.5</td>
+                        <td>13</td>
+                        <td>40</td>
+                        <td>260</td>
+                    </tr>
+                    <tr>
+                        <td>Cobalt</td>
+                        <td>mg/kg</td>
+                        <td>300</td>
+                        <td>300</td>
+                        <td>630</td>
+                        <td>5 000</td>
+                        <td>22 000</td>
+                    </tr>
+                    <tr>
+                        <td>Copper</td>
+                        <td>mg/kg</td>
+                        <td>16</td>
+                        <td>1 100</td>
+                        <td>2 300</td>
+                        <td>19 000</td>
+                        <td>16</td>
+                    </tr>
+                    <tr>
+                        <td>Lead</td>
+                        <td>mg/kg</td>
+                        <td>20</td>
+                        <td>110</td>
+                        <td>230</td>
+                        <td>1 900</td>
+                        <td>100</td>
+                    </tr>
+                    <tr>
+                        <td>Manganese</td>
+                        <td>mg/kg</td>
+                        <td>740</td>
+                        <td>740</td>
+                        <td>1 500</td>
+                        <td>12 000</td>
+                        <td>36 000</td>
+                    </tr>
+                    <tr>
+                        <td>Mercury</td>
+                        <td>mg/kg</td>
+                        <td>1.0</td>
+                        <td>1.0</td>
+                        <td>1.0</td>
+                        <td>6.5</td>
+                        <td>4.1</td>
+                    </tr>
+                    <tr>
+                        <td>Nickel</td>
+                        <td>mg/kg</td>
+                        <td>91</td>
+                        <td>620</td>
+                        <td>1 200</td>
+                        <td>10 000</td>
+                        <td>1 400</td>
+                    </tr>
+                    <tr>
+                        <td>Vanadium</td>
+                        <td>mg/kg</td>
+                        <td>150</td>
+                        <td>150</td>
+                        <td>320</td>
+                        <td>2 600</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>Zinc</td>
+                        <td>mg/kg</td>
+                        <td>240</td>
+                        <td>9 200</td>
+                        <td>19 000</td>
+                        <td>150 000</td>
+                        <td>240</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p style="text-align: justify;">More screening values for metals, organics, and anions can be found <a
+                target="_blank"
+                href="https://cer.org.za/wp-content/uploads/2014/02/natl-norms-and-stds-for-remediation-of-contaminated-land-and-soil-quality.pdf">here</a>
+        </p>
+
+    </div>
+
+
+
+    <div>
+        <footer class="footer">
+            <p>Find us on:</p>
+
+            <div class="social-icons">
+                <a href="#" class="btn btn-outline-primary btn-lg"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" class="btn btn-outline-primary btn-lg me-2"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="btn btn-outline-info btn-lg me-2"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="btn btn-outline-danger btn-lg me-2"><i class="fab fa-instagram"></i></a>
+            </div>
+
+            <p>All Rights Reserved | Capstone Project Group 15</p>
+        </footer>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GROUP 15: CAPSTONE PROJECT</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+</head>
+<body  class="body" style="background-color: rgb(230, 187, 201);">
+{% block content %}
+    <div class="wrapper">
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container">
+                    <h3 class="groupNo">GROUP 15</h3>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('app_ann.home') }}">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('app_ann.about_us') }}">About Us</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('app_ann.input') }}">Soil Prediction</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('app_ann.standards') }}">Soil Quality Standards</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('app_ann.gis_map') }}">GIS Map</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('app_ann.contact') }}">Contact Us</a>
+                            </li>
+                            <li>
+                                <form action="{{ url_for('app_ann.logout') }}" method="POST">
+                                    <input type=submit value="Logout">
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+    </div>
+    <section class="container m-5">
+        
+        <h3 class="text-center">Prediction results</h3>
+        <div class="row m-3">
+            <div class="bg-light col text-center p-2 m-2">
+                <a href="{{ url_for('app_ann.download') }}" class="btn btn-primary">Download File</a>
+            </div>
+            <div class="bg-light p-2 col text-center m-2">
+            <input type="submit" value="See results">
+        </div>
+        </div>
+        
+        <div class="row m-3">
+        <table class="table col m-2">
+        <tr>
+            <th>Id</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+            <th>Cd (mg/kg)</th>
+            <th>Cr (mg/kg)</th>
+            <th>Ni (mg/kg)</th>
+            <th>Pb (mg/kg)</th>
+            <th>Zn (mg/kg)</th>
+            <th>Cu (mg/kg)</th>
+            <th>Co (mg/kg)</th>
+            <th>Predicted class</th>
+        </tr>
+        
+        {% for item in data %}
+        <tr>
+            <td>{{item.id}}</td>
+            <td>{{item.lat}}</td>
+            <td>{{item.long}}</td>
+            <td>{{item.cd}}</td>
+            <td>{{item.cr}}</td>
+            <td>{{item.ni}}</td>
+            <td>{{item.pb}}</td>
+            <td>{{item.zn}}</td>
+            <td>{{item.cu}}</td>
+            <td>{{item.co}}</td>
+            <td>{{item.predicted_class}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+    <div class="row m-3">
+        <div class="w-25 col-md m-2 bg-light">
+            <label><h4>Prediction summary</h4></label>
+            <p type="text">fhfkdkdhf kiie ksksjf ddkfh hedhdk dhhfkd</p>
+        </div>
+    
+    <div class="w-25 col-md m-2 bg-light">
+        <label><h4>Accuracy</h4></label>
+        <p>fhfkdkdhf</p>
+    </div>
+    </div>
+    <div class="row m-3">
+         <div class="w-25 col-md m-2 text-center bg-light">
+        <label><h4 class="">Recomendation</h4></label>
+        <p>fhfkdkdhf kiie ksksjf ddkfh hedhdk dhhfkd</p>
+         </div>
+    </div>
+   
+
+    </section>
+   
+    <div>
+        <footer class="footer text-bg-dark">
+            <p>Find us on:</p>
+            
+            <div class="social-icons">
+                <a href="#" class="btn btn-outline-primary btn-lg"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" class="btn btn-outline-primary btn-lg me-2"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="btn btn-outline-info btn-lg me-2"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="btn btn-outline-danger btn-lg me-2"><i class="fab fa-instagram"></i></a>
+            </div>
+    
+            <p>All Rights Reserved | Capstone Project Group 15</p>
+        </footer>
+    </div><br>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+    integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+    crossorigin="anonymous"></script> 
+    
+    {% endblock %} 
+</body>
+</html>

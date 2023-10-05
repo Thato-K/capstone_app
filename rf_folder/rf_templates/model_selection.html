@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Selection</title>
+</head>
+<body>
+    <h2>Select Model</h2>
+    <form method="POST" action="/model_selection">
+        <label for="model">Choose a model:</label><br>
+        <input type="radio" name="model" value="RandomForest" required> Random Forest Model<br>
+        <input type="radio" name="model" value="ANN"> Other Model<br>
+        <input type="submit" value="Select Model">
+    </form>
+</body>
+</html>

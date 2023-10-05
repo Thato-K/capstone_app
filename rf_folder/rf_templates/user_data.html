@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Data</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+        integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+        crossorigin="anonymous"></script>
+    <script src="//unpkg.com/alpinejs" defer></script>
+    <script src="/static/scripts.js"></script>
+    <style>
+        body {
+            background-color: #dad7cd;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+    </style>
+
+</head>
+
+<body x-data="prediction" x-cloak>
+
+
+    <div class="wrapper">
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-light">
+                <div class="container">
+                    <a class="navbar-brand bg-transparent" href="#">
+                        <img src="/static/images/Green_Nature_Logo-removebg-preview.png" style="background-color: #fff;"
+                            alt="Logo" width="50" height="50" class="d-inline-block px-1 align-text-top">
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item me-3">
+                                <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+                            </li>
+                            <li class="nav-item me-3">
+                                <a class="nav-link" href="{{ url_for('about_us') }}">About Us</a>
+                            </li>
+                            <li class="nav-item me-3">
+                                <a class="nav-link" href="{{ url_for('predict') }}">Soil Prediction</a>
+                            </li>
+                            <li class="nav-item me-3">
+                                <a class="nav-link" href=" ">Map</a>
+                            </li>
+                            <li class="nav-item me-3">
+                                <a class="nav-link" href="{{ url_for('soil_quality_standards') }}">Soil Quality
+                                    Standards</a>
+                            </li>
+                            <li class="nav-item me-3">
+                                <a class="nav-link" href="{{ url_for('contact_us') }}">Contact Us</a>
+                            </li>
+                            <li class="my-auto nav-item me-3">
+                                <form action="/logout">
+                                    <input type="submit" class="btn btn-sm fw-bold btn-danger" value="Logout">
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+    </div>
+
+
+    <h3 class="text-center">User input values</h3>
+    <div class="container">
+        <div class="table-responsive">
+            <table class="table table-bordered text-center">
+                <thead>
+                    <tr>
+                        <th>Latitude</th>
+                        <th>Longitude</th>
+                        <th>Cd Value</th>
+                        <th>Cr Value</th>
+                        <th>Ni Value</th>
+                        <th>Pb Value</th>
+                        <th>Zn Value</th>
+                        <th>Cu Value</th>
+                        <th>Co Value</th>
+                        <th>Contamination</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in user_data %}
+                    <tr>
+                        <td>{{ row[2] }}</td> <!-- Latitude (assuming it's the third column, index 2) -->
+                        <td>{{ row[3] }}</td> <!-- Longitude (assuming it's the fourth column, index 3) -->
+                        <td>{{ row[4] }}</td> <!-- Cd Value -->
+                        <td>{{ row[5] }}</td> <!-- Cr Value -->
+                        <td>{{ row[6] }}</td> <!-- Ni Value -->
+                        <td>{{ row[7] }}</td> <!-- Pb Value -->
+                        <td>{{ row[8] }}</td> <!-- Zn Value -->
+                        <td>{{ row[9] }}</td> <!-- Cu Value -->
+                        <td>{{ row[10] }}</td> <!-- Co Value -->
+                        <td>{{ row[11] }}</td> <!-- Predicted Label -->
+                        <!-- Add other column values here -->
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="container">
+            <p class="mt-5">Do you want to clear your workspace? If yes, click the button below.</p>
+            <form action="/clear_database" method="post">
+                <button type="submit">Clear Workspace</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="container text-center">
+        <form action="/predictor">
+            <input type="submit" class="btn btn-primary" value="Input Values">
+        </form>
+    </div>
+
+
+</body>
+
+</html>
+
+<h1 class="text-center">History</h1>
