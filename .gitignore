@@ -5,3 +5,4 @@ rf_uploads/
 instance/
 __pycache__/
 .ipynb_checkpoints/
+new_venv/
