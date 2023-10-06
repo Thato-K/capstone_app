@@ -78,7 +78,7 @@ def process_excel_file(filename):
     row_count = 0
 
     for index, row in df.iterrows():
-        if row_count >= 100:
+        if row_count >= 30:
             break
         
         latitude = row['Latitude']
