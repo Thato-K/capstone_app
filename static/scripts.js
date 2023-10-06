@@ -9,6 +9,8 @@ document.addEventListener("alpine:init", () => {
       moderate: false,
       high: false,
       very_high: false,
+      table_1: false,
+      table_2: false,
 
     }
   })

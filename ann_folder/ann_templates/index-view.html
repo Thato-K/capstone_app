@@ -1,46 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GROUP 15: CAPSTONE PROJECT</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <title>Contamination Predictor</title>
+    <link rel="icon" type="images/x-icon" href="/static/images/Green_Nature_Logo-removebg-preview.png" />
+
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
-</head>
-<body  class="body" style="background-color: rgb(230, 187, 201);">
-{% block content %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+        integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+        crossorigin="anonymous"></script>
+    <script src="//unpkg.com/alpinejs" defer></script>
+    <script src="/static/script.js"></script>
+    <style>
+        body {
+            background-color: #dad7cd;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+    </style>
+<body  x-data="prediction">
     <div class="wrapper">
         <header>
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <nav class="navbar navbar-expand-lg navbar-light">
                 <div class="container">
-                    <h3 class="groupNo">GROUP 15</h3>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <a class="navbar-brand bg-transparent" href="#">
+                        <img src="/static/images/Green_Nature_Logo-removebg-preview.png" style="background-color: #fff;"
+                            alt="Logo" width="50" height="50" class="d-inline-block px-1 align-text-top">
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNav">
-                        <ul class="navbar-nav">
-                            <li class="nav-item">
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item me-3">
                                 <a class="nav-link" href="{{ url_for('app_ann.home') }}">Home</a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item me-3">
                                 <a class="nav-link" href="{{ url_for('app_ann.about_us') }}">About Us</a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item me-3">
                                 <a class="nav-link" href="{{ url_for('app_ann.input') }}">Soil Prediction</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('app_ann.standards') }}">Soil Quality Standards</a>
-                            </li>
-                            <li class="nav-item">
+                            <li class="nav-item me-3">
                                 <a class="nav-link" href="{{ url_for('app_ann.gis_map') }}">GIS Map</a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item me-3">
+                                <a class="nav-link" href="{{ url_for('app_ann.standards') }}">Soil Quality Standards</a>
+                            </li>
+
+                            <li class="nav-item me-3">
                                 <a class="nav-link" href="{{ url_for('app_ann.contact') }}">Contact Us</a>
                             </li>
-                            <li>
-                                <form action="{{ url_for('app_ann.logout') }}" method="POST">
-                                    <input type=submit value="Logout">
+                            <li class="my-auto nav-item me-3">
+                                <form action="{{ url_for('app_ann.logout')}}">
+                                    <input type="submit" class="btn btn-sm fw-bold btn-danger" value="Logout">
                                 </form>
                             </li>
                         </ul>
@@ -49,18 +67,19 @@
             </nav>
         </header>
     </div>
+
     <section class="container m-5">
         
         <h3 class="text-center">Prediction results</h3>
         <div class="row m-3">
             <div class="bg-light col text-center p-2 m-2">
-                <a href="{{ url_for('app_ann.download') }}" class="btn btn-primary">Download File</a>
+                <a href="{{ url_for('app_ann.download') }}" class="btn btn-primary fw-bold">Download File</a>
             </div>
             <div class="bg-light p-2 col text-center m-2">
-            <input type="submit" value="See results">
+            <input type="submit" x-on:click="show = ! show" value="See results">
         </div>
         </div>
-        
+        <div x-show="!show">
         <div class="row m-3">
         <table class="table col m-2">
         <tr>
@@ -94,21 +113,188 @@
         {% endfor %}
     </table>
 </div>
-    <div class="row m-3">
+</div>
+    <!-- <div class="row m-3">
         <div class="w-25 col-md m-2 bg-light">
             <label><h4>Prediction summary</h4></label>
             <p type="text">fhfkdkdhf kiie ksksjf ddkfh hedhdk dhhfkd</p>
-        </div>
+        </div> -->
     
-    <div class="w-25 col-md m-2 bg-light">
+    <!-- <div class="w-25 col-md m-2 bg-light">
         <label><h4>Accuracy</h4></label>
         <p>fhfkdkdhf</p>
+    </div> -->
     </div>
-    </div>
-    <div class="row m-3">
+    <div class="row m-3 px-4">
          <div class="w-25 col-md m-2 text-center bg-light">
-        <label><h4 class="">Recomendation</h4></label>
-        <p>fhfkdkdhf kiie ksksjf ddkfh hedhdk dhhfkd</p>
+        <label><h4 class="">Recommendations</h4></label>
+        <div style="text-align: justify;" x-cloak>
+
+            <p class="text-center">If scale of contamination level is (Click the buttons to view the recommendations):
+            </p>
+            <div x-show="!low" x-cloak>
+                <button class="btn btn-sm btn-success very-low fw-bold  mb-4" x-on:click="low = !low">1. Very low | low
+                </button>
+            </div>
+            <div x-show="low" x-cloak>
+                <button class="btn btn-sm btn-success very-low fw-bold mb-4" x-on:click="low = !low">Hide
+                    Recommendations </button>
+
+                <ol>
+                    <li><b>Regular Monitoring</b>: Continue monitoring the soil quality to ensure that contamination
+                        levels
+                        remain low and
+                        do not pose any risks to human health or the environment.</li>
+
+                    <li><b>Preventive Measures</b>: Implement preventive measures to minimize the risk of contamination.
+                        This
+                        may include
+                        proper waste management, avoiding the use of harmful chemicals, and promoting sustainable
+                        agricultural
+                        practices.</li>
+
+                    <li><b>Soil Testing</b>: Conduct regular soil testing to assess nutrient levels and pH balance. This
+                        will
+                        help identify
+                        any potential deficiencies or imbalances that may affect plant growth.</li>
+
+                    <li><b>Organic Matter</b>: Maintain a healthy level of organic matter in the soil through practices
+                        such
+                        as
+                        composting
+                        and mulching. Organic matter improves soil structure, enhances nutrient retention, and promotes
+                        beneficial
+                        microbial activity.</li>
+
+                    <li><b>Crop Rotation</b>: Practice crop rotation to prevent the buildup of pests, diseases, and
+                        nutrient
+                        imbalances in
+                        the soil. This helps maintain soil fertility and reduces the need for chemical inputs.</li>
+
+                    <li><b>Water Management</b>: Implement proper water management techniques to prevent waterlogging or
+                        excessive runoff,
+                        which can lead to soil erosion and nutrient leaching.</li>
+
+                    <li><b>Educational Programs</b>: Promote awareness and education about soil conservation and
+                        sustainable
+                        farming
+                        practices among farmers, gardeners, and the general public.</li>
+                </ol>
+
+            </div>
+            <div x-show="!moderate" x-cloak>
+                <button class="btn btn-sm btn-warning moderate mb-4 fw-bold"
+                    x-on:click="moderate = !moderate">2. Moderate</button>
+            </div>
+            <div x-show="moderate">
+                <button class="btn moderate btn-sm btn-warning mb-4 fw-bold" x-on:click="moderate = !moderate">Hide
+                    Recommendations</button>
+
+                <ol>
+                    <li> <b>Identify Sources of Contamination</b>: Identify the sources of pollution and take steps to
+                        mitigate them. This could
+                        include industrial activities, agricultural practices, or waste disposal sites.</li>
+                    <li><b>Implement Remediation Strategies</b>: Depending on the type of contaminants present,
+                        different
+                        remediation
+                        strategies can be implemented. This could include soil washing, bioremediation, or
+                        phytoremediation.
+                    </li>
+                    <li><b>Regulate Industrial Activities</b>: Implement strict regulations for industries that may be
+                        contributing to the
+                        contamination. This includes regular monitoring and enforcement of environmental standards.</li>
+                    <li><b>Promote Sustainable Practices</b>: Encourage the use of sustainable practices such as organic
+                        farming and the use of
+                        clean energy sources.</li>
+                    <li><b>Community Engagement</b>: Engage with the local community to promote awareness about the
+                        importance of reducing
+                        contamination and maintaining a clean environment.</li>
+                </ol>
+
+            </div>
+
+            <div x-show="!high">
+                <button class="btn btn-sm btn-danger mb-4 high fw-bold" x-on:click="high = !high">3. High</button>
+            </div>
+            <div x-show="high">
+                <button class="btn btn-sm btn-danger mb-4 high fw-bold" x-on:click="high = !high">Close</button>
+
+                <ol>
+                    <li><b>Immediate Intervention</b>: High levels of contamination require immediate intervention to
+                        prevent
+                        further environmental damage and potential health risks. This could involve ceasing activities
+                        that
+                        are contributing to the contamination and implementing emergency clean-up measures.
+
+                    <li><b>Remediation Measures</b>: Implementing remediation measures such as soil washing,
+                        bioremediation,
+                        or
+                        phytoremediation can help reduce the level of contaminants in the environment.</li>
+
+                    <li><b>Strict Regulations</b>: Enforcing strict environmental regulations can help control and limit
+                        the
+                        release of pollutants into the environment. This includes regular monitoring and enforcement of
+                        environmental standards.</li>
+
+                    <li><b>Engagement</b>: Engaging with the local community to promote awareness about the importance
+                        of
+                        reducing contamination and maintaining a clean environment can encourage more responsible
+                        behavior.
+                    </li>
+
+                    <li><b>Long-term Monitoring</b>: Regular monitoring of the environment can help track progress and
+                        ensure that
+                        remediation measures are effective.</li>
+                </ol>
+
+            </div>
+
+            <div x-show="!very_high">
+                <button class="btn btn-sm btn-dark very-high mb-4 fw-bold" x-on:click="very_high = !very_high">4. Very High
+                    | Extremely High |
+                    Ultra-high</button>
+            </div>
+            <div x-show="very_high">
+                <button class="btn btn-sm btn-dark very-high mb-4 fw-bold" x-on:click="very_high = !very_high">Very High
+                    | Extremely High |
+                    Ultra-high</button>
+
+                <ol>
+                    <li><b>Emergency Measures</b>: Very high levels of contamination require immediate intervention to
+                        prevent
+                        further environmental damage and potential health risks. This could involve ceasing activities
+                        that
+                        are contributing to the contamination and implementing emergency clean-up measures.</li>
+
+                    <li><b>Intensive Remediation</b>: Implementing intensive remediation measures such as soil washing,
+                        bioremediation, or phytoremediation can help reduce the level of contaminants in the
+                        environment.
+                    </li>
+
+                    <li><b>Regulations and Enforcement</b>: Enforcing strict environmental regulations can help control
+                        and
+                        limit the release of pollutants into the environment. This includes regular monitoring and
+                        enforcement of environmental standards.</li>
+
+                    <li><b>Community Engagement and Relocation</b>: Engaging with the local community to promote
+                        awareness
+                        about
+                        the importance of reducing contamination and maintaining a clean environment can encourage more
+                        responsible behavior. In some cases, it may be necessary to relocate residents temporarily while
+                        remediation measures are being implemented.</li>
+
+                    <li><b>Long-term Monitoring and Maintenance</b>: Regular monitoring of the environment can help
+                        track
+                        progress
+                        and ensure that remediation measures are effective. It's also important to maintain these
+                        efforts
+                        over the long term to prevent re-contamination.</li>
+                </ol>
+
+            </div>
+
+
+        </div>
          </div>
     </div>
    
@@ -116,24 +302,22 @@
     </section>
    
     <div>
-        <footer class="footer text-bg-dark">
+        <footer class="footer">
             <p>Find us on:</p>
-            
+
             <div class="social-icons">
                 <a href="#" class="btn btn-outline-primary btn-lg"><i class="fab fa-linkedin-in"></i></a>
                 <a href="#" class="btn btn-outline-primary btn-lg me-2"><i class="fab fa-facebook-f"></i></a>
                 <a href="#" class="btn btn-outline-info btn-lg me-2"><i class="fab fa-twitter"></i></a>
                 <a href="#" class="btn btn-outline-danger btn-lg me-2"><i class="fab fa-instagram"></i></a>
             </div>
-    
+
             <p>All Rights Reserved | Capstone Project Group 15</p>
         </footer>
-    </div><br>
+    </div>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
     integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
     crossorigin="anonymous"></script> 
-    
-    {% endblock %} 
 </body>
 </html>

@@ -7,6 +7,17 @@ body {
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
+.download-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
 h1,
 h3,
 h6 {
@@ -154,6 +165,29 @@ nav {
     color: #588157;
 }
 
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    /* Transparent white background */
+    display: none;
+    /* Hide by default */
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 9999;
+    /* Make sure it's on top of everything */
+}
+
+.loading-text {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
 .footer {
     /* background-color: #003049; */
     background-color: #344e41;
@@ -298,8 +332,10 @@ nav {
 }
 
 .contact-card img {
-    max-height: 150px; /* Adjust the max height of the images */
-    object-fit: cover; /* Make sure images cover the entire card */
+    max-height: 150px;
+    /* Adjust the max height of the images */
+    object-fit: cover;
+    /* Make sure images cover the entire card */
 }
 
 .contact-card .card-body {

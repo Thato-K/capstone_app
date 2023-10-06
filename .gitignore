@@ -1,5 +1,5 @@
 .venv
-delete.sql
+rf_folder/delete.sql
 uploads/
 rf_uploads/
 instance/

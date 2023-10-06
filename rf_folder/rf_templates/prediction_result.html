@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prediction Result</title>
+    <link rel="icon" type="images/x-icon" href="/static/images/Green_Nature_Logo-removebg-preview.png" />
+
     <link rel="stylesheet" href="/static/style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
@@ -20,6 +22,7 @@
             background-color: #dad7cd;
             font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
         }
+
     </style>
 
 </head>
@@ -40,26 +43,26 @@
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav ms-auto">
                             <li class="nav-item me-3">
-                                <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+                                <a class="nav-link" href="{{ url_for('app_rf.index') }}">Home</a>
                             </li>
                             <li class="nav-item me-3">
-                                <a class="nav-link" href="{{ url_for('about_us') }}">About Us</a>
+                                <a class="nav-link" href="{{ url_for('app_rf.about_us') }}">About Us</a>
                             </li>
                             <li class="nav-item me-3">
-                                <a class="nav-link" href="{{ url_for('predict') }}">Soil Prediction</a>
+                                <a class="nav-link" href="{{ url_for('app_rf.predict') }}">Soil Prediction</a>
                             </li>
                             <li class="nav-item me-3">
                                 <a class="nav-link" href=" ">Map</a>
                             </li>
                             <li class="nav-item me-3">
-                                <a class="nav-link" href="{{ url_for('soil_quality_standards') }}">Soil Quality
+                                <a class="nav-link" href="{{ url_for('app_rf.soil_quality_standards') }}">Soil Quality
                                     Standards</a>
                             </li>
                             <li class="nav-item me-3">
-                                <a class="nav-link" href="{{ url_for('contact_us') }}">Contact Us</a>
+                                <a class="nav-link" href="{{ url_for('app_rf.contact_us') }}">Contact Us</a>
                             </li>
                             <li class="my-auto nav-item me-3">
-                                <form action="/logout">
+                                <form action="{{ url_for('app_rf.logout')}}">
                                     <input type="submit" class="btn btn-sm fw-bold btn-danger" value="Logout">
                                 </form>
                             </li>
@@ -71,26 +74,6 @@
     </div>
 
     <div class="container mb-3 text-center">
-        <h1>Results</h1>
-        <h2>Pollution Index</h2>
-        <p>The pollution index used to measure contamination for this model is the <b>Modified contamination factor
-                (mCdeg)</b></p>
-        <div x-show="!show" x-cloak>
-            <button x-on:click="show = !show" class="btn btn-info fw-bold my-3">Read more about the mCdeg</button>
-        </div>
-        <div x-show="show" x-cloak>
-            <button x-on:click="show = !show" class="btn btn-warning fw-bold">Close the section</button>
-            <p style="text-align: justify;">
-                Modified Contamination Factor is a multielement index used to assess soil and sediment contamination.
-                This classifies the soil on a seven-order scale of contamination, which is:
-                <b><em>very low contamination (mCdeg ≤ 1.5), Low contamination (1.5 ≤ mCdeg ≤ 2),
-                        Moderate contamination (2 ≤ mCdeg ≤ 4), High contamination (4 ≤ mCdeg ≤ 8), Very high
-                        contamination
-                        (8 ≤ mCdeg ≤ 16), Extremely high contamination (16 ≤ mCdeg ≤ 32), Ultra-high contamination (32 ≤
-                        mCdeg)</em></b> (
-                <b><u><a href="https://doi.org/10.1016/j.teac.2022.e00169">Source</a></u></b> ).
-            </p>
-        </div>
 
         <div x-cloak>
             <h1 class="mb-4">Predicted Contamination Level</h1>
@@ -103,76 +86,86 @@
                 </h6>
             </div>
             <p>To see the contamination levels of the other soil samples click <a
-                    href="{{ url_for('user_data') }}">here</a>.</p>
+                    href="{{ url_for('app_rf.user_data') }}">here</a>.</p>
 
         </div>
     </div>
 
     <div class="container">
-        <div x-show="!recommend">
-            <button x-on:click="recommend = !recommend">View/Close Recommendations</button>
-        </div>
-    
-        <div x-show="recommend">
-            <div>
-    
+        <h3 class="text-center">View Recommendations</h3>
+
+
+        <div x-show="!recommend" x-cloak>
+
+            <p class="text-center">If scale of contamination level is (Click the buttons to view the recommendations):
+            </p>
+            <div x-show="!low" x-cloak>
+                <button class="btn btn-sm btn-success very-low fw-bold  mb-4" x-on:click="low = !low">1. Very low | low
+                </button>
             </div>
-            <p>If scale of contamination level is:</p>
-            <div x-show="!low">
-                <button class="btn very-low fw-bold" x-on:click="low = !low">Very low | low </button>
-            </div>
-            <div x-show="low">
+            <div x-show="low" x-cloak>
+                <button class="btn btn-sm btn-success very-low fw-bold mb-4" x-on:click="low = !low">Hide
+                    Recommendations </button>
+
                 <ol>
-                    <li><b>Regular Monitoring</b>: Continue monitoring the soil quality to ensure that contamination levels
+                    <li><b>Regular Monitoring</b>: Continue monitoring the soil quality to ensure that contamination
+                        levels
                         remain low and
                         do not pose any risks to human health or the environment.</li>
-    
+
                     <li><b>Preventive Measures</b>: Implement preventive measures to minimize the risk of contamination.
                         This
                         may include
                         proper waste management, avoiding the use of harmful chemicals, and promoting sustainable
                         agricultural
                         practices.</li>
-    
+
                     <li><b>Soil Testing</b>: Conduct regular soil testing to assess nutrient levels and pH balance. This
                         will
                         help identify
                         any potential deficiencies or imbalances that may affect plant growth.</li>
-    
-                    <li><b>Organic Matter</b>: Maintain a healthy level of organic matter in the soil through practices such
+
+                    <li><b>Organic Matter</b>: Maintain a healthy level of organic matter in the soil through practices
+                        such
                         as
                         composting
                         and mulching. Organic matter improves soil structure, enhances nutrient retention, and promotes
                         beneficial
                         microbial activity.</li>
-    
-                    <li><b>Crop Rotation</b>: Practice crop rotation to prevent the buildup of pests, diseases, and nutrient
+
+                    <li><b>Crop Rotation</b>: Practice crop rotation to prevent the buildup of pests, diseases, and
+                        nutrient
                         imbalances in
                         the soil. This helps maintain soil fertility and reduces the need for chemical inputs.</li>
-    
+
                     <li><b>Water Management</b>: Implement proper water management techniques to prevent waterlogging or
                         excessive runoff,
                         which can lead to soil erosion and nutrient leaching.</li>
-    
-                    <li><b>Educational Programs</b>: Promote awareness and education about soil conservation and sustainable
+
+                    <li><b>Educational Programs</b>: Promote awareness and education about soil conservation and
+                        sustainable
                         farming
                         practices among farmers, gardeners, and the general public.</li>
                 </ol>
-                <button class="btn very-low fw-bold mx-auto" x-on:click="low = !low">Hide Recommendations </button>
-    
+
             </div>
-            <div x-show="!moderate">
-                <button class="btn moderate fw-bold" x-on:click="moderate = !moderate">Moderate</button>
+            <div x-show="!moderate" x-cloak>
+                <button class="btn btn-sm btn-warning moderate mb-4 fw-bold"
+                    x-on:click="moderate = !moderate">2. Moderate</button>
             </div>
             <div x-show="moderate">
-    
+                <button class="btn moderate btn-sm btn-warning mb-4 fw-bold" x-on:click="moderate = !moderate">Hide
+                    Recommendations</button>
+
                 <ol>
                     <li> <b>Identify Sources of Contamination</b>: Identify the sources of pollution and take steps to
                         mitigate them. This could
                         include industrial activities, agricultural practices, or waste disposal sites.</li>
-                    <li><b>Implement Remediation Strategies</b>: Depending on the type of contaminants present, different
+                    <li><b>Implement Remediation Strategies</b>: Depending on the type of contaminants present,
+                        different
                         remediation
-                        strategies can be implemented. This could include soil washing, bioremediation, or phytoremediation.
+                        strategies can be implemented. This could include soil washing, bioremediation, or
+                        phytoremediation.
                     </li>
                     <li><b>Regulate Industrial Activities</b>: Implement strict regulations for industries that may be
                         contributing to the
@@ -184,89 +177,99 @@
                         importance of reducing
                         contamination and maintaining a clean environment.</li>
                 </ol>
-                <button class="btn moderate fw-bold" x-on:click="moderate = !moderate">Hide Recommendations</button>
-    
+
             </div>
-    
+
             <div x-show="!high">
-                <button class="btn high fw-bold" x-on:click="high = !high">High</button>
+                <button class="btn btn-sm btn-danger mb-4 high fw-bold" x-on:click="high = !high">3. High</button>
             </div>
             <div x-show="high">
-    
+                <button class="btn btn-sm btn-danger mb-4 high fw-bold" x-on:click="high = !high">Close</button>
+
                 <ol>
                     <li><b>Immediate Intervention</b>: High levels of contamination require immediate intervention to
                         prevent
-                        further environmental damage and potential health risks. This could involve ceasing activities that
+                        further environmental damage and potential health risks. This could involve ceasing activities
+                        that
                         are contributing to the contamination and implementing emergency clean-up measures.
-    
-                    <li><b>Remediation Measures</b>: Implementing remediation measures such as soil washing, bioremediation,
+
+                    <li><b>Remediation Measures</b>: Implementing remediation measures such as soil washing,
+                        bioremediation,
                         or
                         phytoremediation can help reduce the level of contaminants in the environment.</li>
-    
-                    <li><b>Strict Regulations</b>: Enforcing strict environmental regulations can help control and limit the
+
+                    <li><b>Strict Regulations</b>: Enforcing strict environmental regulations can help control and limit
+                        the
                         release of pollutants into the environment. This includes regular monitoring and enforcement of
                         environmental standards.</li>
-    
-                    <li><b>Engagement</b>: Engaging with the local community to promote awareness about the importance of
-                        reducing contamination and maintaining a clean environment can encourage more responsible behavior.
+
+                    <li><b>Engagement</b>: Engaging with the local community to promote awareness about the importance
+                        of
+                        reducing contamination and maintaining a clean environment can encourage more responsible
+                        behavior.
                     </li>
-    
+
                     <li><b>Long-term Monitoring</b>: Regular monitoring of the environment can help track progress and
                         ensure that
                         remediation measures are effective.</li>
                 </ol>
-                <button class="btn high fw-bold" x-on:click="high = !high">Hide Recommendations</button>
-    
+
             </div>
-    
+
             <div x-show="!very_high">
-                <button class="btn very-high fw-bold" x-on:click="very_high = !very_high">Very High | Extremely High |
+                <button class="btn btn-sm btn-dark very-high mb-4 fw-bold" x-on:click="very_high = !very_high">4. Very High
+                    | Extremely High |
                     Ultra-high</button>
             </div>
             <div x-show="very_high">
+                <button class="btn btn-sm btn-dark very-high mb-4 fw-bold" x-on:click="very_high = !very_high">Very High
+                    | Extremely High |
+                    Ultra-high</button>
+
                 <ol>
                     <li><b>Emergency Measures</b>: Very high levels of contamination require immediate intervention to
                         prevent
-                        further environmental damage and potential health risks. This could involve ceasing activities that
+                        further environmental damage and potential health risks. This could involve ceasing activities
+                        that
                         are contributing to the contamination and implementing emergency clean-up measures.</li>
-    
+
                     <li><b>Intensive Remediation</b>: Implementing intensive remediation measures such as soil washing,
-                        bioremediation, or phytoremediation can help reduce the level of contaminants in the environment.
+                        bioremediation, or phytoremediation can help reduce the level of contaminants in the
+                        environment.
                     </li>
-    
-                    <li><b>Regulations and Enforcement</b>: Enforcing strict environmental regulations can help control and
+
+                    <li><b>Regulations and Enforcement</b>: Enforcing strict environmental regulations can help control
+                        and
                         limit the release of pollutants into the environment. This includes regular monitoring and
                         enforcement of environmental standards.</li>
-    
-                    <li><b>Community Engagement and Relocation</b>: Engaging with the local community to promote awareness
+
+                    <li><b>Community Engagement and Relocation</b>: Engaging with the local community to promote
+                        awareness
                         about
                         the importance of reducing contamination and maintaining a clean environment can encourage more
                         responsible behavior. In some cases, it may be necessary to relocate residents temporarily while
                         remediation measures are being implemented.</li>
-    
-                    <li><b>Long-term Monitoring and Maintenance</b>: Regular monitoring of the environment can help track
+
+                    <li><b>Long-term Monitoring and Maintenance</b>: Regular monitoring of the environment can help
+                        track
                         progress
-                        and ensure that remediation measures are effective. It's also important to maintain these efforts
+                        and ensure that remediation measures are effective. It's also important to maintain these
+                        efforts
                         over the long term to prevent re-contamination.</li>
                 </ol>
-                <button class="btn very-high fw-bold" x-on:click="very_high = !very_high">Hide Recommendations</button>
-    
+
             </div>
-    
-    
+
+
         </div>
-    
-    
+
+
         <div class="container text-center">
-            <br><br>
-    
-            <form action="/predictor">
-                <input type="submit" class="btn btn-primary mt-3" value="Back">
-            </form>
+
         </div>
-    
+
     </div>
-   
+
     <footer class="footer">
         <div class="container">
             <p>Find us on:</p>

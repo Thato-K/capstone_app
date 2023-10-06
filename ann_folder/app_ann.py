@@ -14,7 +14,7 @@ from sklearn import metrics
 from sqlalchemy import REAL
 
 
-app_ann = Blueprint("app_ann", __name__, static_folder="ann_static", template_folder="ann_templates")
+app_ann = Blueprint("app_ann", __name__, template_folder="ann_templates")
 
 
 #Decoded classes based on ann_c model
@@ -75,7 +75,7 @@ def logout():
             db.session.close()
             return render_template("index-login.html")
     else:
-         return redirect(url_for("#"))
+         return redirect(url_for("app_ann.login"))
     
 @app_ann.route("/about_us")
 def about_us():

@@ -8,26 +8,24 @@ from werkzeug.utils import secure_filename
 import json
 
 
-app_rf = Blueprint("app_rf", __name__, static_folder="rf_static", template_folder="rf_templates")
+app_rf = Blueprint("app_rf", __name__, template_folder="rf_templates")
 
-uploads_folder = current_app.config['UPLOAD_FOLDER']
-extensions = current_app.config['ALLOWED_EXTENSIONS']
-secret_key = current_app.config['secret_key']
+def init_app(app):
+    UPLOAD_FOLDER = 'uploads'
+    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+    app.secret_key = 'contamination'
+
 def allowed_file(filename):
-        ext = extensions
-        return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ext
+    ALLOWED_EXTENSIONS = {'xls', 'xlsx'}
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@app_rf.route('/user_upload')
-def user_upload():
-    
-    return render_template('upload.html')
+# @app_rf.route('/user_upload')
+# def user_upload():
+#     return render_template('upload.html')
 
 @app_rf.route('/upload', methods=['POST'])
 def upload_file():
-
-    
-
     if 'file' not in request.files:
         return jsonify({'message': 'No file provided'}), 400
 
@@ -38,7 +36,7 @@ def upload_file():
 
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
-        file_path = os.path.join(uploads_folder, filename)
+        file_path = os.path.join('uploads', filename)
 
         # Process the uploaded file in chunks
         with open(file_path, 'wb') as f:
@@ -56,9 +54,10 @@ def upload_file():
 
     return jsonify({'message': 'Invalid file type'}), 400
 
+
 @app_rf.route('/download/<result_filename>')
 def download_result(result_filename):
-    return send_file(os.path.join(uploads_folder, result_filename), as_attachment=True, mimetype = 'application/pdf')
+    return send_file(os.path.join('uploads', result_filename), as_attachment=True)
 
 @app_rf.route('/process/<filename>', methods=['GET', 'POST'])
 def process_uploaded_file(filename):
@@ -69,7 +68,7 @@ def process_uploaded_file(filename):
 
 def process_excel_file(filename):
     # Assuming your function reads the Excel file and extracts the necessary data
-    df = pd.read_excel(os.path.join(uploads_folder, filename))
+    df = pd.read_excel(os.path.join('uploads', filename))
 
     # Drop rows with missing values
     df = df.dropna(subset=['Latitude', 'Longitude', 'Cd_value', 'Cr_value', 'Ni_value', 'Pb_value', 'Zn_value', 'Cu_value', 'Co_value'])
@@ -109,7 +108,7 @@ def process_excel_file(filename):
             results.append([latitude, longitude, cd_value, cr_value, ni_value, pb_value, zn_value, cu_value, co_value, predicted_label])
 
             # Store the data in the database
-            conn = sqlite3.connect('prediction.db')
+            conn = sqlite3.connect('rf_folder\prediction.db')
             c = conn.cursor()
             c.execute('''INSERT INTO user_data
                          (username, latitude, longitude, cd_value, cr_value, ni_value, pb_value, zn_value, cu_value, co_value, predicted_label)
@@ -124,7 +123,7 @@ def process_excel_file(filename):
 
     # Save the DataFrame to an Excel file
     result_filename = f"results_{filename}"
-    result_df.to_excel(os.path.join(uploads_folder, result_filename), index=False)
+    result_df.to_excel(os.path.join('uploads', result_filename), index=False)
 
     return result_filename
 
@@ -134,11 +133,11 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         session['username'] = username
-        return redirect(url_for('index'))
+        return redirect(url_for('app_rf.index'))
     return render_template('login.html')
 
 def username_exists(username):
-    conn = sqlite3.connect('prediction.db')
+    conn = sqlite3.connect('rf_folder\prediction.db')
     c = conn.cursor()
     c.execute('SELECT * FROM user_data WHERE username=?', (username,))
     result = c.fetchone()
@@ -150,25 +149,30 @@ def logout():
     if 'username' in session:
         clear_user_workspace()
         session.pop('username', None)
-    return redirect(url_for('login'))
+    return redirect(url_for('app_rf.login'))
 
 def clear_user_workspace():
-    conn = sqlite3.connect('prediction.db')
-    c = conn.cursor()
-    c.execute('DELETE FROM user_data')
-    conn.commit()
-    conn.close()
+    try:
+        conn = sqlite3.connect('rf_folder\prediction.db')
+        c = conn.cursor()
+        c.execute('DELETE FROM user_data')
+        conn.commit()
+    except Exception as e:
+        print(f"Error clearing workspace: {e}")
+    finally:
+        conn.close()
 
-@app_rf.route('/clear_workspace', methods=['POST'])
+
+@app_rf.route('/clear_workspace', methods=['GET', 'POST'])
 def clear_workspace():
-    conn = sqlite3.connect('prediction.db')
-    c = conn.cursor()
-    c.execute('DELETE FROM user_data')
-    conn.commit()
-    conn.close()
+    if request.method == 'POST':
+        clear_user_workspace()  # Call the function to clear the database
 
-    session.pop('username', None)
-    return redirect(url_for('login'))
+        session.pop('username', None)  # Clear the session
+        return redirect(url_for('app_rf.login'))
+
+    return render_template('clear_workspace.html')
+
 
 def check_logged_in():
     return 'username' in session
@@ -177,39 +181,39 @@ def check_logged_in():
 @app_rf.route('/')
 def index():
     if not check_logged_in():
-        return redirect(url_for('login'))
+        return redirect(url_for('app_rf.login'))
     username = session.get('username')
-    return render_template('index-homepage.html', name=username)
+    return render_template('index.html', name=username)
 
 
 @app_rf.route('/contact_us')
 def contact_us():
-    return render_template('index-contact-us.html')
+    return render_template('contact.html')
 
 @app_rf.route('/about_us')
 def about_us():
-    return render_template('index-about-us.html')
+    return render_template('about.html')
 
 @app_rf.route('/soil_quality_standards')
 def soil_quality_standards():
-    return render_template('index-soil-quality-sta.html')
+    return render_template('soil-quality.html')
 
 @app_rf.route('/predictor')
 def go_back():
     if not check_logged_in():
-        return redirect(url_for('login'))
+        return redirect(url_for('app_rf.login'))
     return render_template('prediction.html')
 
 # Load the model using pickle
-with open('rf_model.pkl', 'rb') as model_file:
+with open('rf_folder/rf_model.pkl', 'rb') as model_file:
     rf_model = pickle.load(model_file)
 
 # Load the label encoder
-with open('label_encoder.pkl', 'rb') as encoder_file:
+with open('rf_folder/label_encoder.pkl', 'rb') as encoder_file:
     label_encoder = pickle.load(encoder_file)
 
 def has_exceeded_limit(username):
-    conn = sqlite3.connect('prediction.db')
+    conn = sqlite3.connect('rf_folder\prediction.db')
     c = conn.cursor()
     c.execute('SELECT COUNT(*) FROM user_data WHERE username=?', (username,))
     count = c.fetchone()[0]
@@ -221,7 +225,7 @@ def save_data():
     data = request.get_json()
 
     # Insert the data into the database
-    conn = sqlite3.connect('prediction.db')
+    conn = sqlite3.connect('rf_folder\prediction.db')
     c = conn.cursor()
     c.execute('''INSERT INTO user_data
                  (username, latitude, longitude, cd_value, cr_value, ni_value, pb_value, zn_value, cu_value, co_value)
@@ -240,7 +244,7 @@ def save_data():
 @app_rf.route('/prediction_result', methods=['GET', 'POST'])
 def prediction_result():
     if request.method == 'POST':
-        conn = sqlite3.connect('prediction.db')
+        conn = sqlite3.connect('rf_folder\prediction.db')
         c = conn.cursor()
         c.execute('SELECT * FROM user_data WHERE username=? ORDER BY id DESC LIMIT 1', (session['username'],))
         result = c.fetchone()
@@ -254,7 +258,7 @@ def prediction_result():
         else:
             return render_template('error.html', message="No recent prediction found.")
 
-    return redirect(url_for('predict'))
+    return redirect(url_for('app_rf.predict'))
 
 @app_rf.route('/predict', methods=['GET', 'POST'])
 def predict():
@@ -299,34 +303,35 @@ def predict():
         # Inverse transform the prediction to get the original label
         predicted_label = label_encoder.inverse_transform(y_pred_new)
 
-        conn = sqlite3.connect('prediction.db')
+        conn = sqlite3.connect('rf_folder\prediction.db')
         c = conn.cursor()
         c.execute('''INSERT INTO user_data
                  (username, latitude, longitude, cd_value, cr_value, ni_value, pb_value, zn_value, cu_value, co_value, predicted_label)
                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',
-              (session['username'], latitude, longitude, cd_value, cr_value, ni_value, pb_value, zn_value, cu_value, co_value, predicted_label[0]))
+              (session.get('username'), latitude, longitude, cd_value, cr_value, ni_value, pb_value, zn_value, cu_value, co_value, predicted_label[0]))
         conn.commit()
         conn.close()
 
-        return render_template('prediction_result.html', predicted_label=predicted_label[0], name=username, latitude=latitude, longitude=longitude)
+        return render_template('prediction_result.html', predicted_label=predicted_label[0], name=session.get('username'), latitude=latitude, longitude=longitude)
 
-    if has_exceeded_limit(session['username']):
+    if has_exceeded_limit(session.get('username', '')):
         return render_template('error.html', message="You have reached the maximum limit of 150 entries.", show_clear_database_button=True)
 
     # Check for duplicate entry
-    if username_exists(session['username'], latitude, longitude):
+    if username_exists(session.get('username', ''), latitude, longitude):
         return render_template('error.html', message="You have already submitted an entry with these coordinates.")
 
     else:
         # Handle the GET request
         if not check_logged_in():
-            return redirect(url_for('login'))
+            return redirect(url_for('app_rf.login'))
         return render_template('prediction.html', latitude=latitude, longitude=longitude)
+
 
     
 # Helper function to check for duplicate entry
 def username_exists(username, latitude, longitude):
-    conn = sqlite3.connect('prediction.db')
+    conn = sqlite3.connect('rf_folder\prediction.db')
     c = conn.cursor()
     c.execute('SELECT * FROM user_data WHERE username=? AND latitude=? AND longitude=?', (username, latitude, longitude))
     result = c.fetchone()
@@ -336,9 +341,9 @@ def username_exists(username, latitude, longitude):
 @app_rf.route('/user_data')
 def user_data():
     if not check_logged_in():
-        return redirect(url_for('login'))
+        return redirect(url_for('app_rf.login'))
 
-    conn = sqlite3.connect('prediction.db')
+    conn = sqlite3.connect('rf_folder\prediction.db')
     c = conn.cursor()
     c.execute('SELECT * FROM user_data WHERE username=?', (session['username'],))
     user_data = c.fetchall()
@@ -351,35 +356,23 @@ def user_data():
 @app_rf.route('/clear_database', methods=['GET', 'POST'])
 def clear_database():
     if request.method == 'POST':
-        # Clear the database for the current user
-        conn = sqlite3.connect('prediction.db')
-        c = conn.cursor()
-        c.execute('DELETE FROM user_data WHERE username=?', (session['username'],))
-        conn.commit()
-        conn.close()
-        
-        return redirect(url_for('index'))
+        clear_user_workspace()  # Call the function to clear the database
+
+        session.pop('username', None)  # Clear the session
+        return redirect(url_for('app_rf.login'))
 
     # Check if the database is empty
-    conn = sqlite3.connect('prediction.db')
+    conn = sqlite3.connect('rf_folder\prediction.db')
     c = conn.cursor()
     c.execute('SELECT COUNT(*) FROM user_data WHERE username=?', (session['username'],))
     count = c.fetchone()[0]
     conn.close()
 
-    session['database_empty'] = True
-
-    print("Value of database_empty: ", session.get('database_empty'))
-
-    if count == 0:
-        return render_template('clear_database.html')
-
-    return render_template('clear_database.html')
-
+    return render_template('clear_database.html', database_empty=count == 0)
 
 
 def init_db():
-    conn = sqlite3.connect('prediction.db')
+    conn = sqlite3.connect('rf_folder\prediction.db')
     c = conn.cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS user_data
                  (id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -397,3 +390,7 @@ def init_db():
     conn.commit()
     conn.close()
 
+
+if __name__ == '__main__':
+    init_db()
+    app_rf.run(debug=True)
