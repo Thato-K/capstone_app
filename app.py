@@ -4,6 +4,7 @@ from config import Config
 from rf_config import rf_Config
 from ann_folder.app_ann import app_ann
 from rf_folder.app_rf import app_rf, init_app
+import sqlite3
 
 
 app = Flask(__name__, template_folder="templates")
@@ -36,8 +37,28 @@ def home():
     else:
         return render_template("homepage.html")
 
+def init_db():
+    conn = sqlite3.connect('rf_folder\prediction.db')
+    c = conn.cursor()
+    c.execute('''CREATE TABLE IF NOT EXISTS user_data
+                 (id INTEGER PRIMARY KEY AUTOINCREMENT,
+                  username TEXT,
+                  latitude REAL,
+                  longitude REAL,
+                  cd_value REAL,
+                  cr_value REAL,
+                  ni_value REAL,
+                  pb_value REAL,
+                  zn_value REAL,
+                  cu_value REAL,
+                  co_value REAL,
+                  predicted_label TEXT)''')
+    conn.commit()
+    conn.close()
+
 
 
 if __name__ == '__main__':
-    init_app(app) 
+    init_app(app)
+    init_db() 
     app.run(debug=True)
