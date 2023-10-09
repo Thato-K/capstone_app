@@ -1,7 +1,5 @@
 .venv
 rf_folder/delete.sql
-uploads/
-rf_uploads/
 instance/
 __pycache__/
 .ipynb_checkpoints/
