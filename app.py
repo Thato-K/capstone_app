@@ -37,28 +37,8 @@ def home():
     else:
         return render_template("homepage.html")
 
-def init_db():
-    conn = sqlite3.connect('rf_folder\prediction.db')
-    c = conn.cursor()
-    c.execute('''CREATE TABLE IF NOT EXISTS user_data
-                 (id INTEGER PRIMARY KEY AUTOINCREMENT,
-                  username TEXT,
-                  latitude REAL,
-                  longitude REAL,
-                  cd_value REAL,
-                  cr_value REAL,
-                  ni_value REAL,
-                  pb_value REAL,
-                  zn_value REAL,
-                  cu_value REAL,
-                  co_value REAL,
-                  predicted_label TEXT)''')
-    conn.commit()
-    conn.close()
-
 
 
 if __name__ == '__main__':
     init_app(app)
-    init_db() 
     app.run(debug=True)
