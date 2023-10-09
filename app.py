@@ -37,7 +37,15 @@ def home():
     else:
         return render_template("homepage.html")
 
+# Load the configuration
+app.config.from_pyfile('config.py')
 
+# Initialize the database
+db.init_app(app)
+
+# Create the tables
+with app.app_context():
+    db.create_all()
 
 if __name__ == '__main__':
     init_app(app)
