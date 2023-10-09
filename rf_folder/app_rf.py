@@ -148,8 +148,19 @@ def username_exists(username):
 def logout():
     if 'username' in session:
         clear_user_workspace()
+        clear_user_files()  # Add this line to remove uploaded files
         session.pop('username', None)
     return redirect(url_for('app_rf.login'))
+
+def clear_user_files():
+    try:
+        uploads_dir = os.path.join(os.getcwd(), 'uploads')  # Get the full path to the uploads directory
+        for filename in os.listdir(uploads_dir):
+            file_path = os.path.join(uploads_dir, filename)
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+    except Exception as e:
+        print(f"Error clearing user files: {e}")
 
 def clear_user_workspace():
     try:
