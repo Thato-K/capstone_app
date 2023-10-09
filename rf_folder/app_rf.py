@@ -108,7 +108,7 @@ def process_excel_file(filename):
             results.append([latitude, longitude, cd_value, cr_value, ni_value, pb_value, zn_value, cu_value, co_value, predicted_label])
 
             # Store the data in the database
-            conn = sqlite3.connect('rf_folder\prediction.db')
+            conn = sqlite3.connect('rf_folder/prediction.db')
             c = conn.cursor()
             c.execute('''INSERT INTO user_data
                          (username, latitude, longitude, cd_value, cr_value, ni_value, pb_value, zn_value, cu_value, co_value, predicted_label)
@@ -137,7 +137,7 @@ def login():
     return render_template('login.html')
 
 def username_exists(username):
-    conn = sqlite3.connect('rf_folder\prediction.db')
+    conn = sqlite3.connect('rf_folder/prediction.db')
     c = conn.cursor()
     c.execute('SELECT * FROM user_data WHERE username=?', (username,))
     result = c.fetchone()
@@ -153,7 +153,7 @@ def logout():
 
 def clear_user_workspace():
     try:
-        conn = sqlite3.connect('rf_folder\prediction.db')
+        conn = sqlite3.connect('rf_folder/prediction.db')
         c = conn.cursor()
         c.execute('DELETE FROM user_data')
         conn.commit()
@@ -213,7 +213,7 @@ with open('rf_folder/label_encoder.pkl', 'rb') as encoder_file:
     label_encoder = pickle.load(encoder_file)
 
 def has_exceeded_limit(username):
-    conn = sqlite3.connect('rf_folder\prediction.db')
+    conn = sqlite3.connect('rf_folder/prediction.db')
     c = conn.cursor()
     c.execute('SELECT COUNT(*) FROM user_data WHERE username=?', (username,))
     count = c.fetchone()[0]
@@ -225,7 +225,7 @@ def save_data():
     data = request.get_json()
 
     # Insert the data into the database
-    conn = sqlite3.connect('rf_folder\prediction.db')
+    conn = sqlite3.connect('rf_folder/prediction.db')
     c = conn.cursor()
     c.execute('''INSERT INTO user_data
                  (username, latitude, longitude, cd_value, cr_value, ni_value, pb_value, zn_value, cu_value, co_value)
@@ -244,7 +244,7 @@ def save_data():
 @app_rf.route('/prediction_result', methods=['GET', 'POST'])
 def prediction_result():
     if request.method == 'POST':
-        conn = sqlite3.connect('rf_folder\prediction.db')
+        conn = sqlite3.connect('rf_folder/prediction.db')
         c = conn.cursor()
         c.execute('SELECT * FROM user_data WHERE username=? ORDER BY id DESC LIMIT 1', (session['username'],))
         result = c.fetchone()
@@ -303,7 +303,7 @@ def predict():
         # Inverse transform the prediction to get the original label
         predicted_label = label_encoder.inverse_transform(y_pred_new)
 
-        conn = sqlite3.connect('rf_folder\prediction.db')
+        conn = sqlite3.connect('rf_folder/prediction.db')
         c = conn.cursor()
         c.execute('''INSERT INTO user_data
                  (username, latitude, longitude, cd_value, cr_value, ni_value, pb_value, zn_value, cu_value, co_value, predicted_label)
@@ -331,7 +331,7 @@ def predict():
     
 # Helper function to check for duplicate entry
 def username_exists(username, latitude, longitude):
-    conn = sqlite3.connect('rf_folder\prediction.db')
+    conn = sqlite3.connect('rf_folder/prediction.db')
     c = conn.cursor()
     c.execute('SELECT * FROM user_data WHERE username=? AND latitude=? AND longitude=?', (username, latitude, longitude))
     result = c.fetchone()
@@ -343,7 +343,7 @@ def user_data():
     if not check_logged_in():
         return redirect(url_for('app_rf.login'))
 
-    conn = sqlite3.connect('rf_folder\prediction.db')
+    conn = sqlite3.connect('rf_folder/prediction.db')
     c = conn.cursor()
     c.execute('SELECT * FROM user_data WHERE username=?', (session['username'],))
     user_data = c.fetchall()
@@ -362,7 +362,7 @@ def clear_database():
         return redirect(url_for('app_rf.login'))
 
     # Check if the database is empty
-    conn = sqlite3.connect('rf_folder\prediction.db')
+    conn = sqlite3.connect('rf_folder/prediction.db')
     c = conn.cursor()
     c.execute('SELECT COUNT(*) FROM user_data WHERE username=?', (session['username'],))
     count = c.fetchone()[0]
@@ -372,7 +372,7 @@ def clear_database():
 
 
 def init_db():
-    conn = sqlite3.connect('rf_folder\prediction.db')
+    conn = sqlite3.connect('rf_folder/prediction.db')
     c = conn.cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS user_data
                  (id INTEGER PRIMARY KEY AUTOINCREMENT,
