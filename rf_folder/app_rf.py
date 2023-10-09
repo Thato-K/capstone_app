@@ -7,11 +7,11 @@ import os
 from werkzeug.utils import secure_filename
 import json
 
+UPLOAD_FOLDER = 'uploads'
 
 app_rf = Blueprint("app_rf", __name__, template_folder="rf_templates")
 
 def init_app(app):
-    UPLOAD_FOLDER = 'uploads'
     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
     app.secret_key = 'contamination'
 
@@ -36,7 +36,7 @@ def upload_file():
 
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
-        file_path = os.path.join('uploads', filename)
+        file_path = os.path.join(UPLOAD_FOLDER, filename)
 
         # Process the uploaded file in chunks
         with open(file_path, 'wb') as f:
@@ -57,7 +57,7 @@ def upload_file():
 
 @app_rf.route('/download/<result_filename>')
 def download_result(result_filename):
-    return send_file(os.path.join('uploads', result_filename), as_attachment=True)
+    return send_file(os.path.join(UPLOAD_FOLDER, result_filename), as_attachment=True)
 
 @app_rf.route('/process/<filename>', methods=['GET', 'POST'])
 def process_uploaded_file(filename):
@@ -68,7 +68,7 @@ def process_uploaded_file(filename):
 
 def process_excel_file(filename):
     # Assuming your function reads the Excel file and extracts the necessary data
-    df = pd.read_excel(os.path.join('uploads', filename))
+    df = pd.read_excel(os.path.join(UPLOAD_FOLDER, filename))
 
     # Drop rows with missing values
     df = df.dropna(subset=['Latitude', 'Longitude', 'Cd_value', 'Cr_value', 'Ni_value', 'Pb_value', 'Zn_value', 'Cu_value', 'Co_value'])
@@ -123,7 +123,7 @@ def process_excel_file(filename):
 
     # Save the DataFrame to an Excel file
     result_filename = f"results_{filename}"
-    result_df.to_excel(os.path.join('uploads', result_filename), index=False)
+    result_df.to_excel(os.path.join(UPLOAD_FOLDER, result_filename), index=False)
 
     return result_filename
 
@@ -154,7 +154,7 @@ def logout():
 
 def clear_user_files():
     try:
-        uploads_dir = os.path.join(os.getcwd(), 'uploads')  # Get the full path to the uploads directory
+        uploads_dir = os.path.join(os.getcwd(), UPLOAD_FOLDER)  # Get the full path to the uploads directory
         for filename in os.listdir(uploads_dir):
             file_path = os.path.join(uploads_dir, filename)
             if os.path.isfile(file_path):
