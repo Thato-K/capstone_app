@@ -50,7 +50,7 @@
                                 <a class="nav-link" href="{{ url_for('app_rf.predict') }}">Soil Prediction</a>
                             </li>
                             <li class="nav-item me-3">
-                                <a class="nav-link" href=" ">Map</a>
+                                <a class="nav-link" href="{{ url_for('app_rf.gis_map') }}">GIS Map</a>
                             </li>
                             <li class="nav-item me-3">
                                 <a class="nav-link" href="{{ url_for('app_rf.soil_quality_standards') }}">Soil Quality
@@ -80,11 +80,11 @@
 
     <p>Are you sure you want to clear your database entries?</p>
     <form action="{{ url_for('app_rf.clear_database) }}" method="post">
-        <button type="submit">Yes, Clear Database</button>
+        <button class="btn btn-sm btn-danger" type="submit">Yes, Clear Database</button>
     </form>
 
     <form action="{{ url_for('app_rf.user_data) }}">
-        <input type="submit" class="btn btn-success" value="View My Data">
+        <input type="submit" class="btn btn-sm btn-success" value="View My Data">
     </form>
 
     <div class="loading-spinner" id="loading-spinner">

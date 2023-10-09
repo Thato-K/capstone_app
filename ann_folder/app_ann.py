@@ -16,7 +16,6 @@ from sqlalchemy import REAL
 
 app_ann = Blueprint("app_ann", __name__, template_folder="ann_templates")
 
-
 #Decoded classes based on ann_c model
 classes = ['very low contamination', 
            'low contamination', 
@@ -87,7 +86,7 @@ def contact():
 
 @app_ann.route("/gis_map")
 def gis_map():
-     return render_template("index-Gis-map.html")
+     return render_template("index-GIS-map.html")
 
 @app_ann.route("/standards")
 def standards():

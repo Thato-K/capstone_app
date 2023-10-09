@@ -22,51 +22,62 @@
             background-color: #dad7cd;
             font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
         }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+        }
     </style>
 <body  x-data="prediction">
 
     <div class="wrapper">
         <header>
-            <header>
-                <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                    <div class="container">
-                        <h3 class="groupNo">GROUP 15</h3>
-                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                        <div class="collapse navbar-collapse" id="navbarNav">
-                            <ul class="navbar-nav">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ url_for('app_ann.home') }}">Home</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ url_for('app_ann.about_us') }}">About Us</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ url_for('app_ann.input') }}">Soil Prediction</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ url_for('app_ann.standards') }}">Soil Quality Standards</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ url_for('app_ann.gis_map') }}">GIS Map</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ url_for('app_ann.contact') }}">Contact Us</a>
-                                </li>
-                                <li>
-                                    <form action="{{ url_for('app_ann.logout') }}" method="POST">
-                                        <input type=submit value="Logout">
-                                    </form>
-                                </li>
-                            </ul>
-                        </div>
+            <nav class="navbar navbar-expand-lg navbar-light">
+                <div class="container">
+                    <a class="navbar-brand bg-transparent" href="#">
+                        <img src="/static/images/Green_Nature_Logo-removebg-preview.png" style="background-color: #fff;"
+                            alt="Logo" width="50" height="50" class="d-inline-block px-1 align-text-top">
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item me-3">
+                                <a class="nav-link" href="{{ url_for('app_ann.home') }}">Home</a>
+                            </li>
+                            <li class="nav-item me-3">
+                                <a class="nav-link" href="{{ url_for('app_ann.about_us') }}">About Us</a>
+                            </li>
+                            <li class="nav-item me-3">
+                                <a class="nav-link" href="{{ url_for('app_ann.input') }}">Soil Prediction</a>
+                            </li>
+                            <li class="nav-item me-3">
+                                <a class="nav-link" href="{{ url_for('app_ann.gis_map') }}">GIS Map</a>
+                            </li>
+                            <li class="nav-item me-3">
+                                <a class="nav-link" href="{{ url_for('app_ann.standards') }}">Soil Quality Standards</a>
+                            </li>
+
+                            <li class="nav-item me-3">
+                                <a class="nav-link" href="{{ url_for('app_ann.contact') }}">Contact Us</a>
+                            </li>
+                            <li class="my-auto nav-item me-3">
+                                <form action="{{ url_for('app_ann.logout')}}">
+                                    <input type="submit" class="btn btn-sm fw-bold btn-danger" value="Logout">
+                                </form>
+                            </li>
+                        </ul>
                     </div>
-                </nav>
-            </header>
+                </div>
+            </nav>
+        </header>
     </div>
 
-    <div>
+    <div class="container">
         <h2>Create an ArcGIS Map </h2>
         <div class="mapSection">
             <a href="https://www.arcgis.com/home/index.html" target="_blank">

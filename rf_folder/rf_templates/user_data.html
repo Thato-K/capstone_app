@@ -51,7 +51,7 @@
                                 <a class="nav-link" href="{{ url_for('app_rf.predict') }}">Soil Prediction</a>
                             </li>
                             <li class="nav-item me-3">
-                                <a class="nav-link" href=" ">Map</a>
+                                <a class="nav-link" href="{{ url_for('app_rf.gis_map') }}">GIS Map</a>
                             </li>
                             <li class="nav-item me-3">
                                 <a class="nav-link" href="{{ url_for('app_rf.soil_quality_standards') }}">Soil Quality
@@ -110,10 +110,10 @@
                 </tbody>
             </table>
         </div>
-        <div class="container">
+        <div class="container text-center">
             <p class="mt-5">Do you want to clear your workspace? If yes, click the button below.</p>
             <form action="{{ url_for('app_rf.clear_database') }}" method="post">
-                <button type="submit">Clear Workspace</button>
+                <button class="btn btn-danger btn-sm" type="submit">Clear Workspace</button>
             </form>
         </div>
     </div>
