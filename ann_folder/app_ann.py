@@ -202,7 +202,9 @@ def read_file(new_file):
     filepath = f'uploads/{new_file}'
     with open(filepath) as file:
         csvfile = csv.reader(file)
-        for row in csvfile:
+        for i, row in enumerate(csvfile):
+            if i >= 100:  # Limit to first 100 rows
+                break
             data.append(row)
     
     final_set = []
@@ -211,10 +213,26 @@ def read_file(new_file):
         for each in value:
             converted_val = float(each)
             list.append(converted_val)
-            #print(type(converted_val))
         final_set.append(list)
     dataset = pd.DataFrame(final_set, columns=["lat", "long", "cd", "cr", "ni", "pb", "zn", "cu", "co"])
     X = dataset.iloc[:, 2:].values
+    
+    class_prediction = ann_c.predict(X)
+    y_predicted_classes = np.argmax(class_prediction, axis=1)
+    decoded_predicted_classes = class_encoder.inverse_transform(y_predicted_classes)
+    reg_prediction = ann_r.predict(X)
+
+    dataset['predicted_mCdeg'] = reg_prediction
+    dataset['predicted_class'] = decoded_predicted_classes
+    
+    data_to_insert = dataset.to_dict(orient='records')
+    new_data = [file_data(**data) for data in data_to_insert]
+    db.session.add_all(new_data)
+    db.session.commit()
+    db.session.close()
+
+    return redirect(url_for('app_ann.view', mthd=method))
+
     
     #PREDICTION
     class_prediction = ann_c.predict(X)
