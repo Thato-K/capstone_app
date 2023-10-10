@@ -54,29 +54,18 @@ def upload_file():
 
     return jsonify({'message': 'Invalid file type'}), 400
 
-@app_rf.route("/gis_map")
-def gis_map():
-     return render_template("map.html")
+# @app_rf.route("/gis_map")
+# def gis_map():
+#      return render_template("map.html")
 
-@app_rf.route('/get_soil_samples', methods=['GET'])
-def get_soil_samples():
-    conn = sqlite3.connect('rf_folder/prediction.db')
-    c = conn.cursor()
-    c.execute('SELECT latitude, longitude, latitude, longitude, cd_value, cr_value, ni_value, pb_value, zn_value, cu_value, co_value, predicted_label FROM user_data')
-    samples = c.fetchall()
-    conn.close()
-    return jsonify(samples)
-
-@app_rf.route('/get_location/<float:lat>/<float:lon>')
-def get_location(lat, lon):
-    geolocator = Nominatim(user_agent="geoapiExercises")
-    location = geolocator.reverse(f"{lat}, {lon}", exactly_one=True)
-
-    address = location.raw.get('address', {})
-    city = address.get('city', '')
-    country = address.get('country', '')
-
-    return jsonify({"city": city, "country": country})
+# @app_rf.route('/get_soil_samples', methods=['GET'])
+# def get_soil_samples():
+#     conn = sqlite3.connect('rf_folder/prediction.db')
+#     c = conn.cursor()
+#     c.execute('SELECT latitude, longitude, latitude, longitude, cd_value, cr_value, ni_value, pb_value, zn_value, cu_value, co_value, predicted_label FROM user_data')
+#     samples = c.fetchall()
+#     conn.close()
+#     return jsonify(samples)
 
 
 @app_rf.route('/download/<result_filename>')
