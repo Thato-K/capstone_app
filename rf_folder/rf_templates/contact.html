@@ -10,7 +10,9 @@
     <link rel="stylesheet" href="/static/style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
         integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
         crossorigin="anonymous"></script>
@@ -68,7 +70,7 @@
                             </li>
                             <li class="my-auto nav-item me-3">
                                 <form action="{{ url_for('app_rf.logout')}}">
-                                    <input type="submit" class="btn btn-sm fw-bold btn-danger" value="Logout">
+                                    <button type="submit" class="btn btn-sm fw-bold btn-danger" >Logout <i class="fa-solid fa-right-from-bracket"></i></button>
                                 </form>
                             </li>
                         </ul>
@@ -86,8 +88,8 @@
                 <div id="thatoCard" class="card mb-3 contact-card h-100">
                     <img src="/static/images/env.png" class="card-img-top" alt="Thato Kgasago">
                     <div class="card-body">
-                        <h5 class="card-title">Thato Kgasago</h5>
-                        <p class="card-text mb-0">Contact on:</p>
+                        <h5 class="card-title"><i class="fa-solid fa-user"></i> Thato Kgasago</h5>
+                        <p class="card-text mb-0"><i class="fa-solid fa-id-card"></i> Contact on:</p>
 
                         <span><a href="https://www.linkedin.com/in/mmakgape-k-102306214/"
                                 class="btn btn-primary me-2"><i class="fab fa-linkedin-in"></i></a><a
@@ -102,8 +104,8 @@
                 <div id="mosesCard" class="card mb-3 contact-card h-100">
                     <img src="/static/images/World-Geography-Maps.jpg" class="card-img-top" alt="Moses Moletsane">
                     <div class="card-body">
-                        <h5 class="card-title">Moses Moletsane</h5>
-                        <p class="card-text mb-0">Contact on:</p>
+                        <h5 class="card-title"><i class="fa-solid fa-user"></i> Moses Moletsane</h5>
+                        <p class="card-text mb-0"><i class="fa-solid fa-id-card"></i> Contact on:</p>
                         <span><a href="https://www.linkedin.com/in/moses-moletsane-5b6aa3161/"
                                 class="btn btn-primary me-2"><i class="fab fa-linkedin-in"></i></a><a
                                 class="btn btn-warning text-white mx-3" href="mailto:mosesmoletsane17@gmail.com"><i
@@ -117,8 +119,8 @@
                 <div id="amoCard" class="card mb-3 contact-card h-100">
                     <img src="/static/images/civil.jpeg" class="card-img-top" alt="Amogelang Monnanyana">
                     <div class="card-body">
-                        <h5 class="card-title">Amogelang Monnanyana</h5>
-                        <p class="card-text mb-0">Contact on:</p>
+                        <h5 class="card-title"><i class="fa-solid fa-user"></i> Amogelang Monnanyana</h5>
+                        <p class="card-text mb-0"><i class="fa-solid fa-id-card"></i> Contact on:</p>
 
                         <span><a href="https://www.linkedin.com" class="btn btn-primary me-2"><i
                                     class="fab fa-linkedin-in"></i></a><a class="btn btn-warning text-white mx-3"
@@ -136,10 +138,10 @@
             <p>Find us on:</p>
 
             <div class="social-icons">
-                <a href="#" class="btn btn-outline-primary btn-lg"><i class="fab fa-linkedin-in"></i></a>
-                <a href="#" class="btn btn-outline-primary btn-lg me-2"><i class="fab fa-facebook-f"></i></a>
-                <a href="#" class="btn btn-outline-info btn-lg me-2"><i class="fab fa-twitter"></i></a>
-                <a href="#" class="btn btn-outline-danger btn-lg me-2"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="btn btn-outline-light btn-lg"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" class="btn btn-outline-light btn-lg me-2"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="btn btn-outline-light btn-lg me-2"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="#" class="btn btn-outline-light btn-lg me-2"><i class="fab fa-instagram"></i></a>
             </div>
 
             <p>All Rights Reserved | Capstone Project Group 15</p>

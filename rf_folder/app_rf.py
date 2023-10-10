@@ -20,9 +20,9 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-# @app_rf.route('/user_upload')
-# def user_upload():
-#     return render_template('upload.html')
+@app_rf.route('/user_upload')
+def user_upload():
+    return render_template('upload.html')
 
 @app_rf.route('/upload', methods=['POST'])
 def upload_file():
@@ -54,18 +54,18 @@ def upload_file():
 
     return jsonify({'message': 'Invalid file type'}), 400
 
-# @app_rf.route("/gis_map")
-# def gis_map():
-#      return render_template("map.html")
+@app_rf.route("/gis_map")
+def gis_map():
+     return render_template("map.html")
 
-# @app_rf.route('/get_soil_samples', methods=['GET'])
-# def get_soil_samples():
-#     conn = sqlite3.connect('rf_folder/prediction.db')
-#     c = conn.cursor()
-#     c.execute('SELECT latitude, longitude, latitude, longitude, cd_value, cr_value, ni_value, pb_value, zn_value, cu_value, co_value, predicted_label FROM user_data')
-#     samples = c.fetchall()
-#     conn.close()
-#     return jsonify(samples)
+@app_rf.route('/get_soil_samples', methods=['GET'])
+def get_soil_samples():
+    conn = sqlite3.connect('rf_folder/prediction.db')
+    c = conn.cursor()
+    c.execute('SELECT latitude, longitude, latitude, longitude, cd_value, cr_value, ni_value, pb_value, zn_value, cu_value, co_value, predicted_label FROM user_data')
+    samples = c.fetchall()
+    conn.close()
+    return jsonify(samples)
 
 
 @app_rf.route('/download/<result_filename>')
