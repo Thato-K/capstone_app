@@ -9,13 +9,13 @@ import json
 from utils import app
 
 
-# UPLOAD_FOLDER = 'uploads'
+UPLOAD_FOLDER = 'uploads'
 
 app_rf = Blueprint("app_rf", __name__, template_folder="rf_templates")
 
-# def init_app(app):
-#     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-#     app.secret_key = 'contamination'
+def init_app(app):
+    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+    app.secret_key = 'contamination'
 
 def allowed_file(filename):
     ALLOWED_EXTENSIONS = {'xls', 'xlsx'}
