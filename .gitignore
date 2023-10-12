@@ -1,6 +1,5 @@
 .venv
 rf_folder/delete.sql
-instance/
 __pycache__/
 .ipynb_checkpoints/
 new_venv/
