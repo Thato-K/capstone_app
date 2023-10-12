@@ -9,22 +9,15 @@ import json
 from utils import app
 
 
-UPLOAD_FOLDER = 'uploads'
 
 app_rf = Blueprint("app_rf", __name__, template_folder="rf_templates")
 
-def init_app(app):
-    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-    app.secret_key = 'contamination'
-
-def allowed_file(filename):
-    ALLOWED_EXTENSIONS = {'xls', 'xlsx'}
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app_rf.route('/user_upload')
 def user_upload():
     return render_template('upload.html')
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in {'xlsx'}
 
 @app_rf.route('/upload', methods=['POST'])
 def upload_file():
@@ -60,16 +53,6 @@ def upload_file():
 def gis_map():
      return render_template("map.html")
 
-@app_rf.route('/get_soil_samples', methods=['GET'])
-def get_soil_samples():
-    conn = sqlite3.connect('rf_folder/prediction.db')
-    c = conn.cursor()
-    c.execute('SELECT latitude, longitude, latitude, longitude, cd_value, cr_value, ni_value, pb_value, zn_value, cu_value, co_value, predicted_label FROM user_data')
-    samples = c.fetchall()
-    conn.close()
-    return jsonify(samples)
-
-
 @app_rf.route('/download/<result_filename>')
 def download_result(result_filename):
     return send_file(os.path.join(app.config['UPLOAD_FOLDER'], result_filename), as_attachment=True)
@@ -93,7 +76,7 @@ def process_excel_file(filename):
     row_count = 0
 
     for index, row in df.iterrows():
-        if row_count >= 30:
+        if row_count >= 100:
             break
         
         latitude = row['Latitude']
@@ -162,22 +145,13 @@ def username_exists(username):
 @app_rf.route('/logout')
 def logout():
     if 'username' in session:
-        # clear_user_workspace()
-        clear_user_files()  # Add this line to remove uploaded files
+        clear_user_workspace()
         session.pop('username', None)
     return redirect(url_for('app_rf.login'))
 
-def clear_user_files():
-    try:
-        uploads_dir = os.path.join(os.getcwd(), app.config['UPLOAD_FOLDER'])  # Get the full path to the uploads directory
-        for filename in os.listdir(uploads_dir):
-            file_path = os.path.join(uploads_dir, filename)
-            if os.path.isfile(file_path):
-                os.remove(file_path)
-    except Exception as e:
-        print(f"Error clearing user files: {e}")
-
 def clear_user_workspace():
+    conn = None  # Initialize the connection variable
+
     try:
         conn = sqlite3.connect('rf_folder/prediction.db')
         c = conn.cursor()
@@ -186,7 +160,8 @@ def clear_user_workspace():
     except Exception as e:
         print(f"Error clearing workspace: {e}")
     finally:
-        conn.close()
+        if conn:
+            conn.close()  # Close the connection if it's open
 
 
 @app_rf.route('/clear_workspace', methods=['GET', 'POST'])
@@ -419,6 +394,6 @@ def init_db():
 
 if __name__ == '__main__':
     init_db()
-    init_app(app)
     app_rf.run(debug=False)
+
 
