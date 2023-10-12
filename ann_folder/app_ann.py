@@ -196,7 +196,9 @@ def input():
     except KeyError:
         return redirect(url_for('app_ann.login'))
 
-          
+def custom_predict_function(X):
+    return ann_c.predict(X)
+        
 @app_ann.route("/process_data")
 def process_data():
     try:
@@ -217,7 +219,7 @@ def process_data():
                 X = input_set.iloc[:, 2:].values
                 #print(X)
 
-                class_prediction = ann_c.predict(X)
+                class_prediction = custom_predict_function(X)  # Use the decorated function
                 y_predicted_classes = np.argmax(class_prediction, axis=1)
                 #print(class_prediction)
                 decoded_predicted_classes = class_encoder.inverse_transform(y_predicted_classes)
