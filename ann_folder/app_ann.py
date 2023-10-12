@@ -63,27 +63,33 @@ def login():
      else:
           return render_template("index-login.html")
      
-@app_ann.route("/logout", methods = ['POST', 'GET'])
+@app_ann.route("/logout", methods=['POST', 'GET'])
 def logout():
     try:
-        if session['username']:
+        if 'username' in session:
             if request.method == 'POST':
-                input_data = metal_inputs.query.all()
-                for data in input_data:
-                    db.session.delete(data)
+                try:
+                    input_data = metal_inputs.query.all()
+                    for data in input_data:
+                        db.session.delete(data)
 
-                input_data_results = input_results.query.all()
-                for data in input_data_results:
-                    db.session.delete(data)
+                    input_data_results = input_results.query.all()
+                    for data in input_data_results:
+                        db.session.delete(data)
 
-                file_data_results = file_data.query.all()
-                for data in file_data_results:
-                    db.session.delete(data)
-            
-                db.session.commit()
-                db.session.close()
+                    file_data_results = file_data.query.all()
+                    for data in file_data_results:
+                        db.session.delete(data)
+
+                    db.session.commit()  # Commit changes
+                    print("Tables cleared successfully")
+                except Exception as e:
+                    db.session.rollback()  # Rollback changes in case of an error
+                    print(f"An error occurred while clearing tables: {str(e)}")
+                finally:
+                    db.session.close()  # Always close the session
+
                 session.pop('username', None)
-                print("TABLES CLEARED")
                 return render_template("index-login.html")
             else:
                 return "Tables not cleared"
@@ -91,6 +97,7 @@ def logout():
             return "User is not logged in!"
     except KeyError:
         return redirect(url_for('app_ann.login'))
+
     
 @app_ann.route("/about_us")
 def about_us():
@@ -136,38 +143,43 @@ method = ''
 #INPUT DATA METHOD
 @app_ann.route("/input", methods=['POST', 'GET'])
 def input():
-    try:
-        if session['username']:
-            if request.method == 'POST':
-                try:
-                    lat = request.form['lat']
-                    long = request.form['long']
-                    cd = request.form['cd']
-                    cr = request.form['cr']
-                    ni = request.form['ni']
-                    pb = request.form['pb']
-                    zn = request.form['zn']
-                    cu = request.form['cu']
-                    co = request.form['co']
-                    
-                    hm = metal_inputs(lat, long, cd, cr, ni, pb, zn, cu, co)
-                    db.session.add(hm)
-                    db.session.commit()
-                    db.session.close()
-
-                    input_status = request.form['input_status']
-                    session['input_status'] =input_status
-                
-                    return redirect (url_for("app_ann.process_data"))
-                except:
-                    return redirect(url_for('app_ann.input'))
-
-            else:
-                return render_template("index-soil-prediction.html")
-        else:
-            return "User is not logged in!"
-    except KeyError:
+    if 'username' not in session:
         return redirect(url_for('app_ann.login'))
+
+    try:
+        if request.method == 'POST':
+            lat = request.form['lat']
+            long = request.form['long']
+            cd = request.form['cd']
+            cr = request.form['cr']
+            ni = request.form['ni']
+            pb = request.form['pb']
+            zn = request.form['zn']
+            cu = request.form['cu']
+            co = request.form['co']
+
+            hm = metal_inputs(lat, long, cd, cr, ni, pb, zn, cu, co)
+            db.session.add(hm)
+
+            try:
+                db.session.commit()  # Commit changes
+            except Exception as e:
+                db.session.rollback()  # Rollback changes in case of an error
+                print(f"An error occurred: {str(e)}")
+
+            finally:
+                db.session.close()  # Always close the session
+
+            input_status = request.form['input_status']
+            session['input_status'] = input_status
+
+            return redirect(url_for("app_ann.process_data"))
+        else:
+            return render_template("index-soil-prediction.html")
+    except Exception as e:
+        # Handle any exceptions that may occur during input processing
+        return f"An error occurred: {str(e)}"
+
 
           
 @app_ann.route("/process_data")
