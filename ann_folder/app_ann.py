@@ -221,11 +221,8 @@ def process_data():
 
                 class_prediction = custom_predict_function(X)  # Use the decorated function
                 y_predicted_classes = np.argmax(class_prediction, axis=1)
-                #print(class_prediction)
                 decoded_predicted_classes = class_encoder.inverse_transform(y_predicted_classes)
-                # print(decoded_predicted_classes)
                 reg_prediction = ann_r.predict(X)
-                # print(reg_prediction)
 
                 input_set['predicted_mCdeg'] = reg_prediction
                 input_set['predicted_class'] = decoded_predicted_classes

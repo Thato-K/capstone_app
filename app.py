@@ -1,4 +1,5 @@
 from flask import Flask, request, render_template, redirect, url_for
+from datetime import timedelta
 from create_table import db
 from config import Config
 from rf_config import rf_Config
@@ -8,6 +9,15 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
 app = Flask(__name__, template_folder="templates")
+app.config['SERVER_NAME'] = 'soil-toxicity.onrender.com'
+app.config['PROPAGATE_EXCEPTIONS'] = True
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)  # Adjust as needed
+app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
+app.config['JSON_SORT_KEYS'] = False
+app.config['TEMPLATES_AUTO_RELOAD'] = True
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
+app.config['TIMEOUT'] = 600
 app.config['UPLOAD_FOLDER'] = 'uploads'  # Set UPLOAD_FOLDER for the Flask application
 
 # Register blueprints and other configurations after setting UPLOAD_FOLDER
