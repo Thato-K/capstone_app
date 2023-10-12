@@ -19,7 +19,7 @@
             background-image: url('/static/images/Untitled-design.png');
         }
         .card {
-            width: 300px;
+            width: 500px;
             padding: 20px;
             border: 1px solid #ccc;
             border-radius: 8px;
@@ -40,11 +40,12 @@
             border: none;
             border-radius: 4px;
             /* background-color: #007bff; */
-            color: #fff;
+            /* color: #fff; */
             cursor: pointer;
         }
         input[type="submit"]:hover {
             background-color: #096111;
+            color: #fff;
         }
 
         .logo {
@@ -68,18 +69,20 @@
         <div class="rounded">
             <img src="/static/images/Green_Nature_Logo-removebg-preview.png" alt="Logo" class="logo">
         </div>
-        <h2 class="mb-4 text-center">Login</h2>
+        <h6 class="text-center my-3">You chose the <b><u>RF model</u></b></h6>
+        <p class="mb-4 text-center">Enter your username to login</p>
         <form method="POST" action="{{ url_for('app_rf.login') }}">
             <div class="form-group">
                 <input type="text" name="username" class="form-control" placeholder="Username" required>
             </div>
             <input type="submit" value="Login" class="btn btn-primary fw-bold ">
         </form>
-
-        <p class="my-3">Want to change model?</p>
-        <form action="{{ url_for('home')}}">
-            <input class="btn btn-danger fw-bold" type="submit" value="Change Model">
+        <p class="my-3">Want to use a different model? <br>
+        Click the button below to use the <u style="font-size: 15px;"><b>Artificial Neural Network model</b></u></p>
+        <form action="{{ url_for('app_ann.login')}}">
+            <input class="btn btn-warning fw-bold" type="submit" value="Artificial Neural Network Model">
         </form>
     </div>
+
 </body>
 </html>

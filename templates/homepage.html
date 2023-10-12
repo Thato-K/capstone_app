@@ -23,8 +23,27 @@
             background-image: url('/static/images/Untitled-design.png');
         }
 
+        button>a {
+            text-decoration: none;
+            color: black;
+        }
+
+        button>a:hover {
+            color: white;
+        }
+
+        .btn-info:hover {
+            
+            background-color: crimson;
+            color: #fff;
+        }
+
+        .btn-info {
+            width: 100%;
+        }
+
         .card {
-            width: 300px;
+            width: 500px;
             padding: 20px;
             border: 1px solid #ccc;
             border-radius: 8px;
@@ -42,18 +61,18 @@
             border-radius: 4px;
         }
 
-        input[type="submit"] {
+        button[type='submit'] {
             width: 100%;
-            padding: 10px;
             border: none;
             border-radius: 4px;
-            background-color: #007bff;
+            background-color: orangered;
             color: #fff;
             cursor: pointer;
         }
 
-        input[type="submit"]:hover {
-            background-color: #096111;
+        button[type='submit']:hover {
+            background-color: purple;
+            color: #fff;
         }
 
         .logo {
@@ -67,6 +86,10 @@
             height: 100px;
             width: 100px;
         }
+
+        em {
+            font-size: 13px;
+        }
     </style>
 </head>
 
@@ -74,29 +97,40 @@
 
 
     <br>
-    <div class="card">
+    <div class="card ">
         <div class="rounded">
             <img src="/static/images/Green_Nature_Logo-removebg-preview.png" alt="Logo" class="logo">
         </div>
         <form action="#" method="POST">
             <div class="mx-auto my-2">
-                <p>Which model do you want to use? <br>
-                <em>Click either one and then the <b>submit</b> button</em>.
+                <p class="text-center"><b>Which model do you want to use?</b> <br>
+                    <em>Choose either one and then the <b>'Use Model'</b> button</em>.
                 </p>
 
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="model" value="ann_model" id="flexRadioDefault1">
-                    <label class="form-check-label" for="flexRadioDefault1">
+                <div class="form-check my-3 border rounded text-black p-1 bg-warning">
+                    <input class=" " type="radio" name="model" value="ann_model" id="flexRadioDefault1">
+                    <label class=" " for="flexRadioDefault1">
                         Artificial Neural Network
                     </label>
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="model" value="rf_model" id="flexRadioDefault2">
-                    <label class="form-check-label" for="flexRadioDefault2">
+                <div class="form-check my-3 border rounded text-white p-1 bg-success">
+                    <input class="" type="radio" name="model" value="rf_model" id="flexRadioDefault2">
+                    <label class="" for="flexRadioDefault2">
                         Random Forest
                     </label>
                 </div>
-                <input class="my-4 fw-bold" type="submit" value="Submit">
+                <div class="">
+                    <div class=""> <button class="my-3 btn fw-bold text-center" type="submit">Use Model</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col"><button class="my-3 btn btn-info fw-bold text-center"><a
+                                href="https://doi.org/10.1016/B0-12-227410-5/00837-1" target="_blank"
+                                rel="noopener noreferrer">About ANNs</a></button></div>
+                    <div class="col"><button class="my-3 btn btn-info fw-bold text-center"><a
+                        href="https://doi.org/10.1023/A:1010933404324" target="_blank"
+                        rel="noopener noreferrer">About RFs</a></button></div>
+                </div>
             </div>
 
         </form>

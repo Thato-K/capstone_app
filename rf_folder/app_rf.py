@@ -6,14 +6,16 @@ from sklearn.preprocessing import LabelEncoder
 import os
 from werkzeug.utils import secure_filename
 import json
+from utils import app
 
-UPLOAD_FOLDER = 'uploads'
+
+# UPLOAD_FOLDER = 'uploads'
 
 app_rf = Blueprint("app_rf", __name__, template_folder="rf_templates")
 
-def init_app(app):
-    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-    app.secret_key = 'contamination'
+# def init_app(app):
+#     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+#     app.secret_key = 'contamination'
 
 def allowed_file(filename):
     ALLOWED_EXTENSIONS = {'xls', 'xlsx'}
@@ -36,7 +38,7 @@ def upload_file():
 
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
-        file_path = os.path.join(UPLOAD_FOLDER, filename)
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 
         # Process the uploaded file in chunks
         with open(file_path, 'wb') as f:
@@ -70,7 +72,7 @@ def get_soil_samples():
 
 @app_rf.route('/download/<result_filename>')
 def download_result(result_filename):
-    return send_file(os.path.join(UPLOAD_FOLDER, result_filename), as_attachment=True)
+    return send_file(os.path.join(app.config['UPLOAD_FOLDER'], result_filename), as_attachment=True)
 
 @app_rf.route('/process/<filename>', methods=['GET', 'POST'])
 def process_uploaded_file(filename):
@@ -81,7 +83,7 @@ def process_uploaded_file(filename):
 
 def process_excel_file(filename):
     # Assuming your function reads the Excel file and extracts the necessary data
-    df = pd.read_excel(os.path.join(UPLOAD_FOLDER, filename))
+    df = pd.read_excel(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
     # Drop rows with missing values
     df = df.dropna(subset=['Latitude', 'Longitude', 'Cd_value', 'Cr_value', 'Ni_value', 'Pb_value', 'Zn_value', 'Cu_value', 'Co_value'])
@@ -136,7 +138,7 @@ def process_excel_file(filename):
 
     # Save the DataFrame to an Excel file
     result_filename = f"results_{filename}"
-    result_df.to_excel(os.path.join(UPLOAD_FOLDER, result_filename), index=False)
+    result_df.to_excel(os.path.join(app.config['UPLOAD_FOLDER'], result_filename), index=False)
 
     return result_filename
 
@@ -160,14 +162,14 @@ def username_exists(username):
 @app_rf.route('/logout')
 def logout():
     if 'username' in session:
-        clear_user_workspace()
+        # clear_user_workspace()
         clear_user_files()  # Add this line to remove uploaded files
         session.pop('username', None)
     return redirect(url_for('app_rf.login'))
 
 def clear_user_files():
     try:
-        uploads_dir = os.path.join(os.getcwd(), UPLOAD_FOLDER)  # Get the full path to the uploads directory
+        uploads_dir = os.path.join(os.getcwd(), app.config['UPLOAD_FOLDER'])  # Get the full path to the uploads directory
         for filename in os.listdir(uploads_dir):
             file_path = os.path.join(uploads_dir, filename)
             if os.path.isfile(file_path):
@@ -417,5 +419,6 @@ def init_db():
 
 if __name__ == '__main__':
     init_db()
+    init_app(app)
     app_rf.run(debug=False)
 

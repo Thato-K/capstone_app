@@ -61,7 +61,8 @@
                             </li>
                             <li class="my-auto nav-item me-3">
                                 <form action="{{ url_for('app_ann.logout')}}">
-                                    <input type="submit" class="btn btn-sm fw-bold btn-danger" value="Logout">
+                                    <button type="submit" class="btn btn-sm fw-bold btn-danger">Logout <i
+                                            class="fa-solid fa-right-from-bracket"></i></button>
                                 </form>
                             </li>
                         </ul>
@@ -90,18 +91,20 @@
 
         <form action="{{ url_for('app_ann.input') }}" method="POST">
             <div class="container text-center">
-                <h2 class="my-3">Manually Input Values</h2>
-                <h4 class="mb-4">Coordinates</h4>
-                <div class="row justify-content-center">
-                    <div class="col-md-3 mb-2">
-                        <label for="lat">Latitude:</label>
-                        <input type="text" name="lat" class="form-control mx-auto" id="lat">
+                <h2 class="my-3"><i class="fa-solid fa-keyboard"></i> Input Values</h2>
+                    <div class="input-group rounded">
+                        <span class="input-group-text fw-bold"><i class="fa-solid fa-globe me-2"></i> Coordinates <em
+                                class="mx-2" style="font: 5px; font-weight: normal;">(Decimal Degrees)</em></span>
+
+                        <div class="form-floating">
+                            <input type="text" class="form-control fw-light" id="lat" name="lat">
+                            <label for="lat">Latitude</label>
+                        </div>
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="long" name="long">
+                            <label for="long">Longitude</label>
+                        </div>
                     </div>
-                    <div class="col-md-3 mb-2">
-                        <label for="longitude">Longitude:</label>
-                        <input type="text" name="long" class="form-control mx-auto" id="long" name="long">
-                    </div>
-                </div>
             </div>
 
             <h4 class="my-4 text-center">Heavy Metal Concentrations (mg/kg)</h4>
@@ -141,22 +144,45 @@
                 <input type="text" class="form-control" id="co" name="co">
             </div>
             <br>
-            <div class="text-center">
+
+
+
+            <div>
                 <p>If you want to add more values check the '<b>Add more</b>' radio button and then click submit.
                     Otherwise, check '<b>Done</b>' then click submit.</p>
-                <input type="radio" class="mx-auto" name="input_status" value="add_more">Add more<br>
-                <input type="radio" class="mx-auto" name="input_status" value="done">Done <br>
-                <input type="submit" class="btn btn-success btn-sm my-3 fw-bold" value="Submit" />
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" value="add_more" name="input_status"
+                        id="flexRadioDefault1">
+                    <label class="form-check-label" for="flexRadioDefault1">
+                        Add more
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" value="done" name="input_status" id="flexRadioDefault2"
+                        checked>
+                    <label class="form-check-label" for="flexRadioDefault2">
+                        Done
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-success my-3 fw-bold" style="width: 30%;"><i
+                        class="fa-solid fa-check"></i> Submit</button>
             </div>
     </div>
     </form>
     <hr class="container">
     <div class="container text-center my-4">
-        <h2 class="text-center">Upload File</h2>
+        <h2 class="text-center"><i class="fa-solid fa-file-csv"></i> Upload File</h2>
         <form id="upload-form" action="{{ url_for('app_ann.upload') }}" method="post" enctype="multipart/form-data">
-            <input type="file" class="btn btn-warning btn-sm px-3" name="file" id="fileInput">
-            <input type="submit" class="btn btn-success fw-bold" value="Submit">
+            <div class="input-group">
+                <input type="file" class="form-control fw-bold" name="file" id="fileInput"
+                    aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+                <button class="btn btn-secondary fw-bold" type="submit" id="inputGroupFileAddon04"><i
+                        class="fa-solid fa-upload"></i> Upload</button>
+            </div>
         </form>
+
+
+
     </div>
 
     <div>

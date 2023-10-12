@@ -5,12 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contamination Predictor</title>
-    <link rel="icon" type="images/x-icon" href="/static/images/Green_Nature_Logo-removebg-preview.png"/>
+    <link rel="icon" type="images/x-icon" href="/static/images/Green_Nature_Logo-removebg-preview.png" />
 
     <link rel="stylesheet" href="/static/style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
         integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
@@ -64,7 +64,8 @@
                             </li>
                             <li class="my-auto nav-item me-3">
                                 <form action="{{ url_for('app_rf.logout')}}">
-                                    <button type="submit" class="btn btn-sm fw-bold btn-danger" >Logout <i class="fa-solid fa-right-from-bracket"></i></button>
+                                    <button type="submit" class="btn btn-sm fw-bold btn-danger">Logout <i
+                                            class="fa-solid fa-right-from-bracket"></i></button>
                                 </form>
                             </li>
                         </ul>
@@ -90,20 +91,27 @@
         <hr>
 
         <div class="container text-center">
-            <h2 class="text-center">Upload File</h2>
+            <h2 class="text-center"><i class="fa-solid fa-file-excel"></i> Upload File</h2>
             <form id="upload-form" action="{{ url_for('app_rf.upload_file') }}" method="post"
                 enctype="multipart/form-data" onsubmit="uploadFile(event)">
-                <input type="file" class="btn btn-warning btn-sm px-3" name="file" id="fileInput">
-                <button type="submit" class="btn btn-success fw-bold"><i class="fa-solid fa-upload"></i> Submit</button>
-                <!-- Add this div in your HTML file where you want to display the download button -->
-                <div id="download-container"></div>
+                <div class="input-group">
+                    <input type="file" class="form-control fw-bold" name="file" id="fileInput"
+                        aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+                    <button class="btn btn-secondary fw-bold" type="submit" id="inputGroupFileAddon04"><i
+                            class="fa-solid fa-upload"></i> Upload</button>
+                </div>
+            </form>
 
 
-                <div id="progress"></div>
+            <div id="download-container"></div>
+
+
+            <div id="progress"></div>
             </form>
 
             <form action="{{ url_for('app_rf.user_data') }}">
-                <button type="submit" class="btn btn-primary fw-bold my-3" ><i class="fa-solid fa-database"></i> View Data</button>
+                <button type="submit" class="btn btn-primary fw-bold my-3"><i class="fa-solid fa-database"></i> View
+                    Data</button>
             </form>
 
             <div class="loading-overlay" id="loadingOverlay">
@@ -122,66 +130,79 @@
         <form id="predictionForm" action="{{ url_for('app_rf.predict') }}" method="post" class="row g-3">
 
 
-            <div class="container text-center">
-                <h2 class="my-3">Manually Input Values</h2>
-                <h4 class="mb-4">Coordinates</h4>
-                <div class="row justify-content-center">
-                    <div class="col-md-3 mb-2">
-                        <label for="latitude">Latitude:</label>
-                        <input type="text" class="form-control mx-auto" id="latitude" name="latitude">
+            <div class="container my-4 text-center">
+                <span class="fw-bold"><i class="fa-solid fa-globe me-2"></i> Coordinates
+                    <em class="mx-2" style="font: 5px; font-weight: normal;">(Decimal Degrees)</em></span>
+                <div class="input-group rounded">
+                    
+                    <div class="form-floating">
+                        <input type="text" placeholder="latitude" class="form-control fw-light" id="latitude" name="latitude">
+                        <label style="font-weight: normal;" for="latitude">Latitude</label>
                     </div>
-                    <div class="col-md-3 mb-2">
-                        <label for="longitude">Longitude:</label>
-                        <input type="text" class="form-control mx-auto" id="longitude" name="longitude">
+                    <div class="form-floating">
+                        <input type="text" placeholder="longitude" class="form-control" id="longitude" name="longitude">
+                        <label style="font-weight: normal;" for="longitude">Longitude</label>
+
                     </div>
                 </div>
             </div>
-            <h4 class="my-4 text-center">Heavy Metal Concentrations (mg/kg)</h4>
-            <div class="row">
-                <div class="col-md-3 mx-auto ml-2 mr-2">
-                    <label for="cd_value" class="form-label text-center">Cadmium (Cd):</label>
-                    <input type="text" class="form-control" id="cd_value" name="cd_value">
-                </div>
-                <div class="col-md-3 mx-auto ml-2 mr-2">
-                    <label for="cr_value" class="form-label">Chromium (Cr):</label>
-                    <input type="text" class="form-control" id="cr_value" name="cr_value">
-                </div>
-                <div class="col-md-3 mx-auto ml-2 mr-2">
-                    <label for="ni_value" class="form-label">Nickel (Ni):</label>
-                    <input type="text" class="form-control" id="ni_value" name="ni_value">
-                </div>
-            </div>
 
-            <br>
-            <br>
-
-            <div class="row mt-4">
-                <div class="col-md-3 mx-auto ml-2 mr-2">
-                    <label for="pb_value" class="form-label">Lead (Pb):</label>
-                    <input type="text" class="form-control" id="pb_value" name="pb_value">
+             <span class="text-center fw-bold"><i class="fa-solid fa-flask-vial"></i> Metal Concentrations
+                <em class="mx-2" style="font: 5px; font-weight: normal;">(mg/kg)</em></span>
+            <div class="input-group rounded">
+               
+                <div class="form-floating">
+                    <input type="text" class="form-control fw-bold" id="cd_value" placeholder="Cadmium Concentration"
+                        name="cd_value">
+                    <label style="font-weight: normal;" for="cd_value">Cadmium</label>
                 </div>
-                <div class="col-md-3 mx-auto ml-2 mr-2">
-                    <label for="zn_value" class="form-label">Zinc (Zn):</label>
-                    <input type="text" class="form-control" id="zn_value" name="zn_value">
+                <div class="form-floating">
+                    <input type="text" class="form-control fw-bold" placeholder="Chromium Concentration" id="cr_value"
+                        name="cr_value">
+                    <label style="font-weight: normal;" for="cr_value">Chromium</label>
                 </div>
-                <div class="col-md-3 mx-auto ml-2 mr-2">
-                    <label for="cu_value" class="form-label">Copper (Cu):</label>
-                    <input type="text" class="form-control" id="cu_value" name="cu_value">
+                <div class="form-floating">
+                    <input type="text" class="form-control fw-bold" placeholder="Nickel Concentration" id="ni_value"
+                        name="ni_value">
+                    <label style="font-weight: normal;" for="ni_value">Nickel</label>
                 </div>
 
             </div>
 
             <br>
             <br>
-            <div class="col-md-3 mx-auto">
-                <label for="co_value" class="form-label">Cobalt (Co):</label>
-                <input type="text" class="form-control" id="co_value" name="co_value">
+
+            <div class="input-group rounded">
+                <div class="form-floating">
+                    <input type="text" class="form-control fw-bold" id="pb_value" placeholder="Lead Concentration"
+                        name="pb_value">
+                    <label style="font-weight: normal;" for="pb_value">Lead</label>
+                </div>
+                <div class="form-floating">
+                    <input type="text" class="form-control fw-bold" placeholder="Zinc Concentration" id="zn_value"
+                        name="zn_value">
+                    <label style="font-weight: normal;" for="zn_value">Zinc</label>
+                </div>
+                <div class="form-floating">
+                    <input type="text" class="form-control fw-bold" placeholder="Copper Concentration" id="cu_value"
+                        name="cu_value">
+                    <label style="font-weight: normal;" for="cu_value">Copper</label>
+                </div>
+                <div class="form-floating">
+                    <input type="text" class="form-control fw-bold" placeholder="Cobalt Concentration" id="co_value"
+                        name="co_value">
+                    <label style="font-weight: normal;" for="co_value">Cobalt</label>
+                </div>
             </div>
 
-            <a href="{{ url_for('app_rf.predict') }}" class="btn btn-info fw-bold" onclick="validateForm()"><i class="fa-solid fa-arrows-spin"></i> Add more
+            <br>
+            <br>
+
+            <a href="{{ url_for('app_rf.predict') }}" class="btn btn-info fw-bold" onclick="validateForm()"><i
+                    class="fa-solid fa-arrows-spin"></i> Add more
                 values</a>
 
-            <button type="submit" class="btn btn-success fw-bold" ><i class="fa-solid fa-check"></i> Done</button>
+            <button type="submit" class="btn btn-success fw-bold"><i class="fa-solid fa-check"></i> Done</button>
 
         </form>
 
@@ -198,7 +219,7 @@
                 <a href="#" class="btn btn-outline-light btn-lg me-2"><i class="fab fa-instagram"></i></a>
             </div>
 
-            <p>All Rights Reserved | Capstone Project Group 15</p>
+            <p>All Rights Reserved | &copy; Capstone Project Group 15</p>
         </footer>
     </div>
     <script>
@@ -236,10 +257,10 @@
                         // Display a download button
                         const downloadButton = document.createElement('a');
                         downloadButton.href = `{{ url_for('app_rf.download_result', result_filename='')}}${response.result_filename}`;
-                        downloadButton.textContent = 'Download Results';
+                        downloadButton.innerHTML = '<b>Download Results</b> <i class="fa-solid fa-download"></i>';
                         downloadButton.className = 'download-button';
                         document.getElementById('download-container').appendChild(downloadButton);
-
+                        document.getElementById('download-container').style.display = 'block';  // Show download container
                         document.getElementById('progress-bar').innerText = 'Analysis done';
 
                     } else {
@@ -255,8 +276,8 @@
             // Send the form data
             xhr.send(formData);
         };
-
     </script>
+
 
 </body>
 

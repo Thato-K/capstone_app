@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template, redirect, url_for, session, jsonify, send_file, current_app
+from flask import Blueprint, request, render_template, redirect, url_for, session, jsonify, send_file, current_app, make_response, render_template_string
 from models import metal_inputs, input_results, file_data
 from create_table import db
 from flask_sqlalchemy import SQLAlchemy
@@ -28,13 +28,13 @@ classes = ['very low contamination',
 
 class_encoder = LabelEncoder()
 encoded_classes = class_encoder.fit_transform(classes)
-print(encoded_classes)
+# print(encoded_classes)
 
 #Loading ann models
 try:
    ann_c = tf.keras.models.load_model("ann_folder/ml_models/ann-c_model.h5")
    ann_r = tf.keras.models.load_model("ann_folder/ml_models/ann-r_model.h5")
-   print("Model successfully loaded.")
+#    print("Model successfully loaded.")
 
 except Exception as e:
     print(f"Error loading the model: {str(e)}")
@@ -42,9 +42,9 @@ except Exception as e:
 @app_ann.route("/home")
 def home():
     try:
-        if session['username']:
-            user = session['username']
-            return render_template("index-homepage.html", usr=user)
+        if 'username' in session:
+            username = session['username']
+            return render_template("index-homepage.html", name=username)
         else:
             return "User is not logged in!"
     except KeyError:
@@ -56,41 +56,68 @@ def login():
         username = request.form['username']
         session['username'] = username
         if username:
-            return render_template("index-homepage.html")
+            return render_template("index-homepage.html", name=username)
         else:
              message= "Username required!"
              return render_template("index-login.html", mesg=message)
      else:
           return render_template("index-login.html")
-     
-@app_ann.route("/logout", methods = ['POST', 'GET'])
-def logout():
+
+def clear_tables():
     try:
-        if session['username']:
-            if request.method == 'POST':
-                input_data = metal_inputs.query.all()
-                for data in input_data:
-                    db.session.delete(data)
+        # Delete data from the tables
+        metal_inputs.query.delete()
+        input_results.query.delete()
+        file_data.query.delete()
 
-                input_data_results = input_results.query.all()
-                for data in input_data_results:
-                    db.session.delete(data)
+        # Commit the changes
+        db.session.commit()
 
-                file_data_results = file_data.query.all()
-                for data in file_data_results:
-                    db.session.delete(data)
-            
-                db.session.commit()
-                db.session.close()
-                session.pop('username', None)
-                print("TABLES CLEARED")
-                return render_template("index-login.html")
-            else:
-                return "Tables not cleared"
-        else:
-            return "User is not logged in!"
+        print("Data deleted and changes committed")
+
+    except Exception as e:
+        db.session.rollback()
+        print("An error occurred:", str(e))
+
+def clear_uploads_folder():
+    # Specify the uploads folder path
+    uploads_folder = os.path.join(os.getcwd(), 'uploads')
+
+    try:
+        # List all files in the uploads folder and remove them
+        for filename in os.listdir(uploads_folder):
+            file_path = os.path.join(uploads_folder, filename)
+            os.remove(file_path)
+
+        print("Uploads folder cleared")
+
+    except Exception as e:
+        print("An error occurred while clearing uploads folder:", str(e))
+
+@app_ann.route("/logout", methods=['POST', 'GET'])
+def logout():
+
+    try:
+        username = session.get('username')
+        clear_tables()
+        clear_uploads_folder()
+        session.pop(username, None)
+    
+        disable_back_button_script = """
+        <script>
+            history.pushState(null, null, document.URL);
+            window.addEventListener('popstate', function () {
+                history.pushState(null, null, document.URL);
+            });
+        </script>
+        """
+
+        return render_template_string(disable_back_button_script + render_template("index-login.html"))
+    
     except KeyError:
         return redirect(url_for('app_ann.login'))
+
+     
     
 @app_ann.route("/about_us")
 def about_us():
@@ -194,13 +221,13 @@ def process_data():
                 y_predicted_classes = np.argmax(class_prediction, axis=1)
                 #print(class_prediction)
                 decoded_predicted_classes = class_encoder.inverse_transform(y_predicted_classes)
-                print(decoded_predicted_classes)
+                # print(decoded_predicted_classes)
                 reg_prediction = ann_r.predict(X)
-                print(reg_prediction)
+                # print(reg_prediction)
 
                 input_set['predicted_mCdeg'] = reg_prediction
                 input_set['predicted_class'] = decoded_predicted_classes
-                print(input_set)
+                # print(input_set)
                 
                 data_to_insert = input_set.to_dict(orient='records')
                 new_data = [input_results(**data) for data in data_to_insert]
@@ -225,7 +252,7 @@ def upload():
                 
                     file = request.files['file']
                     extention = os.path.splitext(file.filename)[1]
-                    print(extention)
+                    # print(extention)
                     if file:
                         if extention not in extentions:
                             return "File format not supported! Please upload pdf, excel or csv files."
