@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="/static/style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
         integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
@@ -25,6 +25,92 @@
         body {
             background-color: #dad7cd;
             font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+
+        .legend {
+            background-color: #fff;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            position: absolute;
+            top: 40px;
+            right: 1%;
+            z-index: 1000;
+        }
+
+
+        .legend h3 {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .legend-label {
+            font-size: 14px;
+        }
+
+
+        .custom-marker {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            transform: translate(-50%, -50%);
+        }
+
+        .marker-pin {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 16px;
+            height: 16px;
+            background: #fff;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .green {
+            background-color: green;
+        }
+
+        .yellow {
+            background-color: yellow;
+        }
+
+        .orange {
+            background-color: orange;
+        }
+
+        .red {
+            background-color: red;
+        }
+
+        .purple {
+            background-color: purple;
+        }
+
+        .blue {
+            background-color: blue;
+        }
+
+        .black {
+            background-color: black;
+        }
+
+        .gray {
+            background-color: gray;
         }
     </style>
 </head>
@@ -55,7 +141,7 @@
                                 <a class="nav-link" href="{{ url_for('app_rf.predict') }}">Soil Prediction</a>
                             </li>
                             <li class="nav-item me-3">
-                                <a class="nav-link" href="{{ url_for('app_rf.gis_map') }}">GIS Map</a>
+                                <a class="nav-link" href="{{ url_for('app_rf.gis_map') }}">Map</a>
                             </li>
                             <li class="nav-item me-3">
                                 <a class="nav-link" href="{{ url_for('app_rf.soil_quality_standards') }}">Soil Quality
@@ -66,7 +152,8 @@
                             </li>
                             <li class="my-auto nav-item me-3">
                                 <form action="{{ url_for('app_rf.logout')}}">
-                                    <button type="submit" class="btn btn-sm fw-bold btn-danger" >Logout <i class="fa-solid fa-right-from-bracket"></i></button>
+                                    <button type="submit" class="btn btn-sm fw-bold btn-danger">Logout <i
+                                            class="fa-solid fa-right-from-bracket"></i></button>
                                 </form>
                             </li>
                         </ul>
@@ -77,34 +164,78 @@
     </div>
 
 
-    <div class="container">
-        <h1 class="text-center">ArcGIS Map</h1>
-        <div class="d-flex mx-auto justify-content-center align-items-center mapSection" style="height: 55vh;">
+    <div class="container my-3">
+        <div class="d-flex mx-auto justify-content-center align-items-center ">
             <!-- <div class="row">
                 <h2 class="text-center col">View Map </h2> <br> <br>
 
             </div>         -->
-            <a href="https://www.arcgis.com/home/index.html?webmap=46dfcfccfddd4e5ca366118749018b9e" target="_blank">
+            <!-- <a href="https://www.arcgis.com/home/index.html?webmap=46dfcfccfddd4e5ca366118749018b9e" target="_blank">
                 <button type="button" style="width: 500px;" class="btn btn-dark">Click Here to View the ArcGIS Map <i class="fa-solid fa-map"></i></button>
-            </a>
-        </div>
-    </div>
-    
+            </a> -->
+            <div class="container ">
+                <div class="card round text-center" style="height: 600px; position: relative;">
+                    <div class="card-body rounded" >
+                        <h2 class="card-title">Soil Sample Locations</h2>
 
-    <!-- <div class="container" id="map" style="height: 500px; width: 400px"></div> -->
+                        <!-- North Arrow -->
+                        <div style="position: absolute; top: 50%; left: 1%;">
+                            <span class="d-block fw-bold text-center">N</span>
 
-    <!-- <div class="container">
-        <div class="card text-center" style="height: 600px;">
-            <div class="card-body">
-                <h2 class="card-title">Soil Sample Locations</h2>
-                <div class="col">
-                    <div id="map" style="height: 500px; width: 100%;"></div>
+                            <i class="fas fa-arrow-up fa-2x"></i>
+                        </div>
+
+                        <!-- Legend -->
+                        <div style="position: absolute; top: 50%; right: 1%;">
+                           <button class="btn btn-warning btn-sm text-black" style="font-size: 30px;" x-on:click="legend = !legend"><i class="fa-solid fa-circle-info fa-beat"></i></button> 
+                        </div>
+
+                        <div x-show="legend" id="legend" class="legend" x-cloak>
+                            <h3>Contamination Levels</h3>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: green;"></div>
+                                <div class="legend-label">Very Low Contamination</div>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: yellow;"></div>
+                                <div class="legend-label">Low Contamination</div>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: orange;"></div>
+                                <div class="legend-label">Moderate Contamination</div>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: red;"></div>
+                                <div class="legend-label">High Contamination</div>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: purple;"></div>
+                                <div class="legend-label">Very High Contamination</div>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: blue;"></div>
+                                <div class="legend-label">Extremely High Contamination</div>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: black;"></div>
+                                <div class="legend-label">Ultrahigh Contamination</div>
+                            </div>
+                        </div>
+
+
+                        <!-- Map Scale -->
+                        <div style="position: absolute; bottom: 5px; left: 50%; ">
+                            <span class="fw-bold" id="mapScale"></span>
+                        </div>
+
+
+                        <div id="map" class="mx-auto rounded" style="height: 500px; width: 90%;"></div>
+                    </div>
                 </div>
             </div>
+
         </div>
-    </div> -->
-
-
+    </div>
 
 
     <div>
@@ -121,7 +252,7 @@
             <p>All Rights Reserved | &copy; Capstone Project Group 15</p>
         </footer>
     </div>
-<!-- 
+
     <script>
         var map = L.map('map').setView([0, 0], 2);
 
@@ -136,23 +267,133 @@
                     var popupContent = `
                 <b>Latitude:</b> ${sample[0]}<br>
                 <b>Longitude:</b> ${sample[1]}<br>
-                <b>Cd Value:</b> ${sample[4]}<br>
-                <b>Cr Value:</b> ${sample[5]}<br>
-                <b>Ni Value:</b> ${sample[6]}<br>
-                <b>Pb Value:</b> ${sample[7]}<br>
-                <b>Zn Value:</b> ${sample[8]}<br>
-                <b>Cu Value:</b> ${sample[9]}<br>
-                <b>Co Value:</b> ${sample[10]}<br>
-                <b>Contamination:</b> ${sample[11]}</br>
-                <button onclick="getCityAndCountry(${sample[0]}, ${sample[1]})">Get Location</button>
+                <b>Cadmium:</b> ${sample[2]}<br>
+                <b>Chromium:</b> ${sample[3]}<br>
+                <b>Nickel:</b> ${sample[4]}<br>
+                <b>Lead:</b> ${sample[5]}<br>
+                <b>Zinc:</b> ${sample[6]}<br>
+                <b>Copper:</b> ${sample[7]}<br>
+                <b>Cobalt:</b> ${sample[8]}<br>
+                <b>Contamination:</b> ${sample[9]}</br>
             `;
+                    // Add this code to dynamically generate legend items
+                    var contaminationLevel = sample[9];
+                    function getMarkerColor(contaminationLevel) {
+                        switch (contaminationLevel) {
+                            case 'very low contamination':
+                                return 'green';
+                            case 'low contamination':
+                                return 'yellow';
+                            case 'moderate contamination':
+                                return 'orange';
+                            case 'high contamination':
+                                return 'red';
+                            case 'very high contamination':
+                                return 'purple';
+                            case 'extremely high contamination':
+                                return 'blue';
+                            case 'ultrahigh contamination':
+                                return 'black';
+                            default:
+                                return 'gray'; // Default color
+                        }
+                    }
 
-                    L.marker([sample[0], sample[1]])
+                    function addLegendItem(contaminationLevel) {
+                        var legend = document.getElementById('legend');
+                        var legendItem = document.createElement('div');
+                        legendItem.classList.add('legend-item');
+
+                        var legendColor = document.createElement('div');
+                        legendColor.classList.add('legend-color');
+                        legendColor.style.backgroundColor = getMarkerColor(contaminationLevel);
+
+                        var legendLabel = document.createElement('div');
+                        legendLabel.classList.add('legend-label');
+                        legendLabel.textContent = getLegendText(contaminationLevel);
+
+                        legendItem.appendChild(legendColor);
+                        legendItem.appendChild(legendLabel);
+
+                        legend.appendChild(legendItem);
+                    }
+                    var contaminationLevel = sample[9];
+                    var markerColor;
+
+                    switch (contaminationLevel) {
+                        case 'very low contamination':
+                            markerColor = 'green';
+                            break;
+                        case 'low contamination':
+                            markerColor = 'yellow';
+                            break;
+                        case 'moderate contamination':
+                            markerColor = 'orange';
+                            break;
+                        case 'high contamination':
+                            markerColor = 'red';
+                            break;
+                        case 'very high contamination':
+                            markerColor = 'purple';
+                            break;
+                        case 'extremely high contamination':
+                            markerColor = 'blue';
+                            break;
+                        case 'ultrahigh contamination':
+                            markerColor = 'black';
+                            break;
+                        default:
+                            markerColor = 'gray'; // Default color
+                    }
+
+                    function getLegendText(contaminationLevel) {
+                        switch (contaminationLevel) {
+                            case 'very low contamination':
+                                return 'Very Low Contamination';
+                            case 'low contamination':
+                                return 'Low Contamination';
+                            case 'moderate contamination':
+                                return 'Moderate Contamination';
+                            case 'high contamination':
+                                return 'High Contamination';
+                            case 'very high contamination':
+                                return 'Very High Contamination';
+                            case 'extremely high contamination':
+                                return 'Extremely High Contamination';
+                            case 'ultrahigh contamination':
+                                return 'Ultrahigh Contamination';
+                            default:
+                                return 'Unknown Contamination Level';
+                        }
+                    }
+
+                    L.marker([sample[0], sample[1]], {
+                        icon: L.divIcon({
+                            className: 'custom-marker',
+                            html: `<div style="background-color:${markerColor}" class="marker-pin"></div>`,
+                        })
+                    })
                         .addTo(map)
                         .bindPopup(popupContent);
                 });
             });
-    </script> -->
+
+
+        function updateMapScale() {
+            var mapScaleElement = document.getElementById('mapScale');
+            var scale = map.getZoomScale(map.getZoom(), 1);
+            var maxWidth = 150;
+            var scaleValue = (scale * maxWidth).toFixed(0);
+            mapScaleElement.textContent = '1:' + scaleValue;
+        }
+
+        map.on('zoomend', updateMapScale);
+        map.on('resize', updateMapScale);
+
+        // Initial call to set the scale
+        updateMapScale();
+
+    </script>
 
 </body>
 

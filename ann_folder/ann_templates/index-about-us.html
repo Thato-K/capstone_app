@@ -59,7 +59,7 @@
                                 <a class="nav-link" href="{{ url_for('app_ann.contact') }}">Contact Us</a>
                             </li>
                             <li class="my-auto nav-item me-3">
-                                <form action="{{ url_for('app_ann.logout')}}">
+                                <form action="{{ url_for('app_ann.logout')}}" method="POST">
                                     <button type="submit" class="btn btn-sm fw-bold btn-danger" >Logout <i class="fa-solid fa-right-from-bracket"></i></button>
                                 </form>
                             </li>

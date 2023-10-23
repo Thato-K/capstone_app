@@ -56,7 +56,7 @@ def login():
         username = request.form['username']
         session['username'] = username
         if username:
-            return render_template("index-homepage.html")
+            return render_template("index-homepage.html", name=username)
         else:
              message= "Username required!"
              return render_template("index-login.html", mesg=message)
@@ -126,6 +126,57 @@ def gis_map():
             return render_template("index-Gis-map.html")
          else:
              return "User is not logged in!"
+    except KeyError:
+        return redirect(url_for('app_ann.login'))
+
+@app_ann.route("/get_contamination_data", methods=['GET'])
+def get_contamination_data():
+    try:
+        if session['username']:
+            # Fetch data from both tables
+            results_input = input_results.query.all()
+            results_file = file_data.query.all()
+
+            # Prepare the data for sending to the frontend
+            contamination_data = []
+
+            # Process data from input_results table
+            for result in results_input:
+                data_entry = {
+                    'lat': result.lat,
+                    'long': result.long,
+                    'cd': result.cd,
+                    'cr': result.cr,
+                    'ni': result.ni,
+                    'pb': result.pb,
+                    'zn': result.zn,
+                    'cu': result.cu,
+                    'co': result.co,
+                    'predicted_class': result.predicted_class,
+                    'predicted_mCdeg': result.predicted_mCdeg
+                }
+                contamination_data.append(data_entry)
+
+            # Process data from file_data table
+            for result in results_file:
+                data_entry = {
+                    'lat': result.lat,
+                    'long': result.long,
+                    'cd': result.cd,
+                    'cr': result.cr,
+                    'ni': result.ni,
+                    'pb': result.pb,
+                    'zn': result.zn,
+                    'cu': result.cu,
+                    'co': result.co,
+                    'predicted_class': result.predicted_class,
+                    'predicted_mCdeg': result.predicted_mCdeg
+                }
+                contamination_data.append(data_entry)
+
+            return jsonify(contamination_data)
+        else:
+            return "User is not logged in!"
     except KeyError:
         return redirect(url_for('app_ann.login'))
 

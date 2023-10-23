@@ -14,6 +14,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
         integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
         crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
     <script src="//unpkg.com/alpinejs" defer></script>
     <script src="/static/scripts.js"></script>
     <script src="/static/prediction.js"></script>
@@ -23,11 +25,10 @@
             font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
         }
 
-        footer {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            text-align: center;
+        /* Set the map container size */
+        #map {
+            height: 600px;
+            width: 800px;
         }
     </style>
 <body  x-data="prediction">
@@ -66,7 +67,7 @@
                                 <a class="nav-link" href="{{ url_for('app_ann.contact') }}">Contact Us</a>
                             </li>
                             <li class="my-auto nav-item me-3">
-                                <form action="{{ url_for('app_ann.logout')}}">
+                                <form action="{{ url_for('app_ann.logout')}}" method="POST">
                                     <button type="submit" class="btn btn-sm fw-bold btn-danger" >Logout <i class="fa-solid fa-right-from-bracket"></i></button>
                                 </form>
                             </li>
@@ -78,13 +79,15 @@
     </div>
 
     <div class="container">
-        <h2>Create an ArcGIS Map </h2>
+        <!-- <h2>Create an ArcGIS Map </h2>
         <div class="mapSection">
             <a href="https://www.arcgis.com/home/index.html" target="_blank">
                 <button type="button" class="btn btn-dark">Click to map</button>
             </a>
         </div>
-    </div>
+    </div> -->
+    <div id="map"></div>
+
 
     
     
@@ -105,6 +108,37 @@
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
     integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
-    crossorigin="anonymous"></script>    
+    crossorigin="anonymous"></script>  
+    <script>
+        var map = L.map('map').setView([0, 0], 2);  // Set initial view
+
+        // Add a tile layer (OpenStreetMap)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19
+        }).addTo(map);
+
+        // Fetch data from Flask route and add markers
+        fetch('/get_contamination_data')
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(entry => {
+                    var marker = L.marker([entry.lat, entry.long])
+                        .bindPopup(`
+                            <strong>Latitude:</strong> ${entry.lat}<br>
+                            <strong>Longitude:</strong> ${entry.long}<br>
+                            <strong>Cd:</strong> ${entry.cd}<br>
+                            <strong>Cr:</strong> ${entry.cr}<br>
+                            <strong>Ni:</strong> ${entry.ni}<br>
+                            <strong>Pb:</strong> ${entry.pb}<br>
+                            <strong>Zn:</strong> ${entry.zn}<br>
+                            <strong>Cu:</strong> ${entry.cu}<br>
+                            <strong>Co:</strong> ${entry.co}<br>
+                            <strong>Predicted Class:</strong> ${entry.predicted_class}<br>
+                            <strong>Predicted mCdeg:</strong> ${entry.predicted_mCdeg}<br>
+                        `)
+                        .addTo(map);
+                });
+            });
+    </script>  
 </body>
 </html>

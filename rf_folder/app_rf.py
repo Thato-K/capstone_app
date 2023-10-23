@@ -53,6 +53,25 @@ def upload_file():
 def gis_map():
      return render_template("map.html")
 
+@app_rf.route('/get_soil_samples', methods=['GET'])
+def get_soil_samples():
+    # Connect to the database
+    conn = sqlite3.connect('rf_folder/prediction.db')
+    c = conn.cursor()
+
+    # Execute a SELECT query to retrieve soil samples
+    c.execute('SELECT latitude, longitude, cd_value, cr_value, ni_value, pb_value, zn_value, cu_value, co_value, predicted_label FROM user_data')
+
+    # Fetch all results
+    samples = c.fetchall()
+
+    # Close the connection
+    conn.close()
+
+    # Return the samples as JSON
+    return jsonify(samples)
+
+
 @app_rf.route('/download/<result_filename>')
 def download_result(result_filename):
     return send_file(os.path.join(app.config['UPLOAD_FOLDER'], result_filename), as_attachment=True)
