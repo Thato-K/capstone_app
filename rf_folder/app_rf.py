@@ -49,7 +49,7 @@ def upload_file():
 
     return jsonify({'message': 'Invalid file type'}), 400
 
-@app_rf.route("/gis_map")
+@app_rf.route("/map")
 def gis_map():
      return render_template("map.html")
 
