@@ -10,7 +10,9 @@
     <link rel="stylesheet" href="/static/style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
         integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
         crossorigin="anonymous"></script>
@@ -47,10 +49,11 @@
                                 <a class="nav-link" href="{{ url_for('app_ann.about_us') }}">About Us</a>
                             </li>
                             <li class="nav-item me-3">
-                                <a class="nav-link" href="{{ url_for('app_ann.input') }}">Soil Prediction</a>
+                                <a class="nav-link active" aria-current="true"
+                                    href="{{ url_for('app_ann.input') }}">Soil Prediction</a>
                             </li>
                             <li class="nav-item me-3">
-                                <a class="nav-link" href="{{ url_for('app_ann.gis_map') }}">GIS Map</a>
+                                <a class="nav-link" href="{{ url_for('app_ann.map') }}">Map</a>
                             </li>
                             <li class="nav-item me-3">
                                 <a class="nav-link" href="{{ url_for('app_ann.standards') }}">Soil Quality Standards</a>
@@ -92,19 +95,19 @@
         <form action="{{ url_for('app_ann.input') }}" method="POST">
             <div class="container text-center">
                 <h2 class="my-3"><i class="fa-solid fa-keyboard"></i> Input Values</h2>
-                    <div class="input-group rounded">
-                        <span class="input-group-text fw-bold"><i class="fa-solid fa-globe me-2"></i> Coordinates <em
-                                class="mx-2" style="font: 5px; font-weight: normal;">(Decimal Degrees)</em></span>
+                <div class="input-group rounded">
+                    <span class="input-group-text fw-bold"><i class="fa-solid fa-globe me-2"></i> Coordinates <em
+                            class="mx-2" style="font: 5px; font-weight: normal;">(Decimal Degrees)</em></span>
 
-                        <div class="form-floating">
-                            <input type="text" class="form-control fw-light" id="lat" name="lat">
-                            <label for="lat">Latitude</label>
-                        </div>
-                        <div class="form-floating">
-                            <input type="text" class="form-control" id="long" name="long">
-                            <label for="long">Longitude</label>
-                        </div>
+                    <div class="form-floating">
+                        <input type="text" class="form-control fw-light" id="lat" name="lat">
+                        <label for="lat">Latitude</label>
                     </div>
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="long" name="long">
+                        <label for="long">Longitude</label>
+                    </div>
+                </div>
             </div>
 
             <h4 class="my-4 text-center">Heavy Metal Concentrations (mg/kg)</h4>
@@ -190,15 +193,15 @@
             <p>Find us on:</p>
 
             <div class="social-icons">
-                <a href="#" class="btn btn-outline-primary btn-lg"><i class="fab fa-linkedin-in"></i></a>
-                <a href="#" class="btn btn-outline-primary btn-lg me-2"><i class="fab fa-facebook-f"></i></a>
-                <a href="#" class="btn btn-outline-info btn-lg me-2"><i class="fab fa-twitter"></i></a>
-                <a href="#" class="btn btn-outline-danger btn-lg me-2"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="btn btn-outline-light btn-lg"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" class="btn btn-outline-light btn-lg me-2"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="btn btn-outline-light btn-lg me-2"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="#" class="btn btn-outline-light btn-lg me-2"><i class="fab fa-instagram"></i></a>
             </div>
 
-            <p>All Rights Reserved | Capstone Project Group 15</p>
+            <p>All Rights Reserved | &copy; Capstone Project Group 15</p>
         </footer>
-    </div><br>
+    </div>
 
 
 

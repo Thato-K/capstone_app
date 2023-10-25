@@ -10,12 +10,14 @@
     <link rel="stylesheet" href="/static/style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
         integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
         crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
     <script src="//unpkg.com/alpinejs" defer></script>
     <script src="/static/scripts.js"></script>
@@ -139,7 +141,8 @@
                                 <a class="nav-link" href="{{ url_for('app_ann.input') }}">Soil Prediction</a>
                             </li>
                             <li class="nav-item me-3">
-                                <a class="nav-link" href="{{ url_for('app_ann.gis_map') }}">GIS Map</a>
+                                <a class="nav-link active" aria-current="true"
+                                    href="{{ url_for('app_ann.map') }}">Map</a>
                             </li>
                             <li class="nav-item me-3">
                                 <a class="nav-link" href="{{ url_for('app_ann.standards') }}">Soil Quality Standards</a>
@@ -236,42 +239,42 @@
 
             </div>
         </div>
-        </div>
+    </div>
 
 
 
 
-        <div>
-            <footer class="footer">
-                <p>Find us on:</p>
+    <div>
+        <footer class="footer">
+            <p>Find us on:</p>
 
-                <div class="social-icons">
-                    <a href="#" class="btn btn-outline-primary btn-lg"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="#" class="btn btn-outline-primary btn-lg me-2"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="btn btn-outline-info btn-lg me-2"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="btn btn-outline-danger btn-lg me-2"><i class="fab fa-instagram"></i></a>
-                </div>
+            <div class="social-icons">
+                <a href="#" class="btn btn-outline-light btn-lg"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" class="btn btn-outline-light btn-lg me-2"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="btn btn-outline-light btn-lg me-2"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="#" class="btn btn-outline-light btn-lg me-2"><i class="fab fa-instagram"></i></a>
+            </div>
 
-                <p>All Rights Reserved | Capstone Project Group 15</p>
-            </footer>
-        </div>
+            <p>All Rights Reserved | &copy; Capstone Project Group 15</p>
+        </footer>
+    </div>
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
-            integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
-            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+        integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+        crossorigin="anonymous"></script>
 
-        <script>
-            var map = L.map('map').setView([0, 0], 2);
+    <script>
+        var map = L.map('map').setView([0, 0], 2);
 
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 19,
-            }).addTo(map);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+        }).addTo(map);
 
-            fetch('/ann/get_contamination_data')
-                .then(response => response.json())
-                .then(data => {
-                    data.forEach(entry => {
-                        var popupContent = `
+        fetch('/ann/get_contamination_data')
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(entry => {
+                    var popupContent = `
                     <strong>Latitude:</strong> ${entry.lat}<br>
                             <strong>Longitude:</strong> ${entry.long}<br>
                             <strong>Cd:</strong> ${entry.cd}<br>
@@ -283,124 +286,124 @@
                             <strong>Co:</strong> ${entry.co}<br>
                             <strong>Predicted Class:</strong> ${entry.predicted_class}<br>
             `;
-                        // Add this code to dynamically generate legend items
-                        var contaminationLevel = entry.predicted_class;
-                        function getMarkerColor(contaminationLevel) {
-                            switch (contaminationLevel) {
-                                case 'very low contamination':
-                                    return 'green';
-                                case 'low contamination':
-                                    return 'yellow';
-                                case 'moderate contamination':
-                                    return 'orange';
-                                case 'high contamination':
-                                    return 'red';
-                                case 'very high contamination':
-                                    return 'purple';
-                                case 'extremely high contamination':
-                                    return 'blue';
-                                case 'ultrahigh contamination':
-                                    return 'black';
-                                default:
-                                    return 'gray'; // Default color
-                            }
-                        }
-
-                        function addLegendItem(contaminationLevel) {
-                            var legend = document.getElementById('legend');
-                            var legendItem = document.createElement('div');
-                            legendItem.classList.add('legend-item');
-
-                            var legendColor = document.createElement('div');
-                            legendColor.classList.add('legend-color');
-                            legendColor.style.backgroundColor = getMarkerColor(contaminationLevel);
-
-                            var legendLabel = document.createElement('div');
-                            legendLabel.classList.add('legend-label');
-                            legendLabel.textContent = getLegendText(contaminationLevel);
-
-                            legendItem.appendChild(legendColor);
-                            legendItem.appendChild(legendLabel);
-
-                            legend.appendChild(legendItem);
-                        }
-                        var contaminationLevel = entry.predicted_class;
-                        var markerColor;
-
+                    // Add this code to dynamically generate legend items
+                    var contaminationLevel = entry.predicted_class;
+                    function getMarkerColor(contaminationLevel) {
                         switch (contaminationLevel) {
                             case 'very low contamination':
-                                markerColor = 'green';
-                                break;
+                                return 'green';
                             case 'low contamination':
-                                markerColor = 'yellow';
-                                break;
+                                return 'yellow';
                             case 'moderate contamination':
-                                markerColor = 'orange';
-                                break;
+                                return 'orange';
                             case 'high contamination':
-                                markerColor = 'red';
-                                break;
+                                return 'red';
                             case 'very high contamination':
-                                markerColor = 'purple';
-                                break;
+                                return 'purple';
                             case 'extremely high contamination':
-                                markerColor = 'blue';
-                                break;
+                                return 'blue';
                             case 'ultrahigh contamination':
-                                markerColor = 'black';
-                                break;
+                                return 'black';
                             default:
-                                markerColor = 'gray'; // Default color
+                                return 'gray'; // Default color
                         }
+                    }
 
-                        function getLegendText(contaminationLevel) {
-                            switch (contaminationLevel) {
-                                case 'very low contamination':
-                                    return 'Very Low Contamination';
-                                case 'low contamination':
-                                    return 'Low Contamination';
-                                case 'moderate contamination':
-                                    return 'Moderate Contamination';
-                                case 'high contamination':
-                                    return 'High Contamination';
-                                case 'very high contamination':
-                                    return 'Very High Contamination';
-                                case 'extremely high contamination':
-                                    return 'Extremely High Contamination';
-                                case 'ultrahigh contamination':
-                                    return 'Ultrahigh Contamination';
-                                default:
-                                    return 'Unknown Contamination Level';
-                            }
+                    function addLegendItem(contaminationLevel) {
+                        var legend = document.getElementById('legend');
+                        var legendItem = document.createElement('div');
+                        legendItem.classList.add('legend-item');
+
+                        var legendColor = document.createElement('div');
+                        legendColor.classList.add('legend-color');
+                        legendColor.style.backgroundColor = getMarkerColor(contaminationLevel);
+
+                        var legendLabel = document.createElement('div');
+                        legendLabel.classList.add('legend-label');
+                        legendLabel.textContent = getLegendText(contaminationLevel);
+
+                        legendItem.appendChild(legendColor);
+                        legendItem.appendChild(legendLabel);
+
+                        legend.appendChild(legendItem);
+                    }
+                    var contaminationLevel = entry.predicted_class;
+                    var markerColor;
+
+                    switch (contaminationLevel) {
+                        case 'very low contamination':
+                            markerColor = 'green';
+                            break;
+                        case 'low contamination':
+                            markerColor = 'yellow';
+                            break;
+                        case 'moderate contamination':
+                            markerColor = 'orange';
+                            break;
+                        case 'high contamination':
+                            markerColor = 'red';
+                            break;
+                        case 'very high contamination':
+                            markerColor = 'purple';
+                            break;
+                        case 'extremely high contamination':
+                            markerColor = 'blue';
+                            break;
+                        case 'ultrahigh contamination':
+                            markerColor = 'black';
+                            break;
+                        default:
+                            markerColor = 'gray'; // Default color
+                    }
+
+                    function getLegendText(contaminationLevel) {
+                        switch (contaminationLevel) {
+                            case 'very low contamination':
+                                return 'Very Low Contamination';
+                            case 'low contamination':
+                                return 'Low Contamination';
+                            case 'moderate contamination':
+                                return 'Moderate Contamination';
+                            case 'high contamination':
+                                return 'High Contamination';
+                            case 'very high contamination':
+                                return 'Very High Contamination';
+                            case 'extremely high contamination':
+                                return 'Extremely High Contamination';
+                            case 'ultrahigh contamination':
+                                return 'Ultrahigh Contamination';
+                            default:
+                                return 'Unknown Contamination Level';
                         }
+                    }
 
-                        L.marker([entry.lat, entry.long], {
-                            icon: L.divIcon({
-                                className: 'custom-marker',
-                                html: `<div style="background-color:${markerColor}" class="marker-pin"></div>`,
-                            })
+                    L.marker([entry.lat, entry.long], {
+                        icon: L.divIcon({
+                            className: 'custom-marker',
+                            html: `<div style="background-color:${markerColor}" class="marker-pin"></div>`,
                         })
-                            .addTo(map)
-                            .bindPopup(popupContent);
-                    });
+                    })
+                        .addTo(map)
+                        .bindPopup(popupContent);
                 });
+            });
 
 
-            function updateMapScale() {
-                var mapScaleElement = document.getElementById('mapScale');
-                var scale = map.getZoomScale(map.getZoom(), 1);
-                var maxWidth = 150;
-                var scaleValue = (scale * maxWidth).toFixed(0);
-                mapScaleElement.textContent = '1:' + scaleValue;
-            }
+        function updateMapScale() {
+            var mapScaleElement = document.getElementById('mapScale');
+            var scale = map.getZoomScale(map.getZoom(), 1);
+            var maxWidth = 150;
+            var scaleValue = (scale * maxWidth).toFixed(0);
+            mapScaleElement.textContent = '1:' + scaleValue;
+        }
 
-            map.on('zoomend', updateMapScale);
-            map.on('resize', updateMapScale);
+        map.on('zoomend', updateMapScale);
+        map.on('resize', updateMapScale);
 
-            // Initial call to set the scale
-            updateMapScale();
+        // Initial call to set the scale
+        updateMapScale();
 
-        </script>
+    </script>
 </body>
 
 </html>

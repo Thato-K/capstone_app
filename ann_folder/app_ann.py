@@ -28,13 +28,11 @@ classes = ['very low contamination',
 
 class_encoder = LabelEncoder()
 encoded_classes = class_encoder.fit_transform(classes)
-print(encoded_classes)
 
 #Loading ann models
 try:
    ann_c = tf.keras.models.load_model("ann_folder/ml_models/ann-c_model.h5")
    ann_r = tf.keras.models.load_model("ann_folder/ml_models/ann-r_model.h5")
-   print("Model successfully loaded.")
 
 except Exception as e:
     print(f"Error loading the model: {str(e)}")
@@ -103,7 +101,8 @@ def logout():
 def about_us():
     try:
         if session['username']:
-            return render_template("index-about-us.html")
+            user = session['username']
+            return render_template("index-about-us.html", usr=user)
         else:
             return "User not logged in!"
     except KeyError:
@@ -113,17 +112,19 @@ def about_us():
 def contact():
     try:
         if session['username']:
-            return render_template("index-contact-us.html")
+            user = session['username']
+            return render_template("index-contact-us.html", usr=user)
         else: 
             return "User is not logged in!"
     except KeyError:
         return redirect(url_for('app_ann.login'))
 
-@app_ann.route("/gis_map")
-def gis_map():
+@app_ann.route("/map")
+def map():
     try:
          if session['username']:
-            return render_template("index-Gis-map.html")
+            user = session['username']
+            return render_template("index-Gis-map.html", usr=user)
          else:
              return "User is not logged in!"
     except KeyError:
@@ -136,6 +137,7 @@ def get_contamination_data():
             # Fetch data from both tables
             results_input = input_results.query.all()
             results_file = file_data.query.all()
+
 
             # Prepare the data for sending to the frontend
             contamination_data = []
@@ -153,7 +155,6 @@ def get_contamination_data():
                     'cu': result.cu,
                     'co': result.co,
                     'predicted_class': result.predicted_class,
-                    'predicted_mCdeg': result.predicted_mCdeg
                 }
                 contamination_data.append(data_entry)
 
@@ -170,7 +171,6 @@ def get_contamination_data():
                     'cu': result.cu,
                     'co': result.co,
                     'predicted_class': result.predicted_class,
-                    'predicted_mCdeg': result.predicted_mCdeg
                 }
                 contamination_data.append(data_entry)
 
@@ -184,7 +184,8 @@ def get_contamination_data():
 def standards():
     try:
         if session['username']:
-            return render_template("index-soil-quality-sta.html")
+            user = session['username']
+            return render_template("index-soil-quality-sta.html", usr=user)
         else:
              return "User is not logged in!"
     except KeyError:
@@ -226,7 +227,9 @@ def input():
 
             return redirect(url_for("app_ann.process_data"))
         else:
-            return render_template("index-soil-prediction.html")
+            if session['username']:
+                user = session['username']
+            return render_template("index-soil-prediction.html", usr=user)
     except Exception as e:
         # Handle any exceptions that may occur during input processing
         return f"An error occurred: {str(e)}"
@@ -257,13 +260,13 @@ def process_data():
                 y_predicted_classes = np.argmax(class_prediction, axis=1)
                 #print(class_prediction)
                 decoded_predicted_classes = class_encoder.inverse_transform(y_predicted_classes)
-                print(decoded_predicted_classes)
+                # print(decoded_predicted_classes)
                 reg_prediction = ann_r.predict(X)
-                print(reg_prediction)
+                # print(reg_prediction)
 
                 input_set['predicted_mCdeg'] = reg_prediction
                 input_set['predicted_class'] = decoded_predicted_classes
-                print(input_set)
+                # print(input_set)
                 
                 data_to_insert = input_set.to_dict(orient='records')
                 new_data = [input_results(**data) for data in data_to_insert]
@@ -288,7 +291,7 @@ def upload():
                 
                     file = request.files['file']
                     extention = os.path.splitext(file.filename)[1]
-                    print(extention)
+                    # print(extention)
                     if file:
                         if extention not in extentions:
                             return "File format not supported! Please upload pdf, excel or csv files."
@@ -300,9 +303,13 @@ def upload():
                         file_name = secure_filename(file.filename)
                         return redirect(url_for('app_ann.read_file', new_file=file_name))
                     else:
-                        return render_template('index-soil-prediction.html')
+                        if session['username']:
+                            user = session['username']
+                        return render_template('index-soil-prediction.html', usr=user)
                 else:
-                    return render_template('index-soil-prediction.html')
+                    if session['username']:
+                        user = session['username']
+                    return render_template('index-soil-prediction.html', usr=user)
                 
             except RequestEntityTooLarge:
                 return "File is too large than the 20MB limit!"
@@ -323,9 +330,12 @@ def read_file(new_file):
 
             data = []
             filepath = f'uploads/{new_file}'
-            with open(filepath) as file:
+            with open(filepath, 'r') as file:
                 csvfile = csv.reader(file)
-                for row in csvfile:
+                # Read only the first 1000 rows
+                for index, row in enumerate(csvfile):
+                    if index >= 100:
+                        break
                     data.append(row)
             
             final_set = []
@@ -346,7 +356,7 @@ def read_file(new_file):
             decoded_predicted_classes = class_encoder.inverse_transform(y_predicted_classes)
             #print(decoded_predicted_classes)
             reg_prediction = ann_r.predict(X)
-            print(reg_prediction)
+            # print(reg_prediction)
 
             dataset['predicted_mCdeg'] = reg_prediction
             dataset['predicted_class'] = decoded_predicted_classes
@@ -368,12 +378,13 @@ def read_file(new_file):
 def view(mthd):
     try:
         if session['username']:
+            user = session['username']
             if mthd == 'input':
                 results = input_results.query.all()
             elif mthd == 'upload':
                 results = file_data.query.all()
 
-            return render_template('index-view.html', data=results)
+            return render_template('index-view.html', data=results, usr=user)
         else:
             return "User is not logged in!"
     except KeyError:

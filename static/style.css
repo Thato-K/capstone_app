@@ -136,7 +136,6 @@ body.loading {
 
 nav a:hover {
     background-color: #fff;
-    border-radius: 0.5rem;
 }
 
 nav {
@@ -165,6 +164,10 @@ nav {
     color: #588157;
 }
 
+.navbar-nav .active {
+    color: #588157;
+    background-color: #fff;
+}
 .loading-overlay {
     position: fixed;
     top: 0;

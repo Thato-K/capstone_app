@@ -50,7 +50,7 @@ def upload_file():
     return jsonify({'message': 'Invalid file type'}), 400
 
 @app_rf.route("/map")
-def gis_map():
+def map():
      return render_template("map.html")
 
 @app_rf.route('/get_soil_samples', methods=['GET'])
@@ -70,7 +70,6 @@ def get_soil_samples():
 
     # Return the samples as JSON
     return jsonify(samples)
-
 
 @app_rf.route('/download/<result_filename>')
 def download_result(result_filename):
@@ -208,21 +207,31 @@ def index():
 
 @app_rf.route('/contact_us')
 def contact_us():
-    return render_template('contact.html')
+    if not check_logged_in():
+        return redirect(url_for('app_rf.login'))
+    username = session.get('username')
+    return render_template('contact.html', name=username)
 
 @app_rf.route('/about_us')
 def about_us():
-    return render_template('about.html')
+    if not check_logged_in():
+        return redirect(url_for('app_rf.login'))
+    username = session.get('username')
+    return render_template('about.html', name=username)
 
 @app_rf.route('/soil_quality_standards')
 def soil_quality_standards():
-    return render_template('soil-quality.html')
+    if not check_logged_in():
+        return redirect(url_for('app_rf.login'))
+    username = session.get('username')
+    return render_template('soil-quality.html', name=username)
 
 @app_rf.route('/predictor')
 def go_back():
     if not check_logged_in():
         return redirect(url_for('app_rf.login'))
-    return render_template('prediction.html')
+    username = session.get('username')
+    return render_template('prediction.html', name=username)
 
 # Load the model using pickle
 with open('rf_folder/rf_model.pkl', 'rb') as model_file:
@@ -274,9 +283,11 @@ def prediction_result():
             predicted_label = result[-1]  # Assuming the predicted label is the last column
             latitude = result[2]  # Assuming latitude is the third column
             longitude = result[3]  # Assuming longitude is the fourth column
-            return render_template('prediction_result.html', predicted_label=predicted_label, latitude=latitude, longitude=longitude)
+            username = session.get('username')
+            return render_template('prediction_result.html', predicted_label=predicted_label, latitude=latitude, longitude=longitude, name=username)
         else:
-            return render_template('error.html', message="No recent prediction found.")
+            username = session.get('username')
+            return render_template('error.html', message="No recent prediction found.", name=username)
 
     return redirect(url_for('app_rf.predict'))
 
@@ -331,7 +342,7 @@ def predict():
               (session.get('username'), latitude, longitude, cd_value, cr_value, ni_value, pb_value, zn_value, cu_value, co_value, predicted_label[0]))
         conn.commit()
         conn.close()
-
+        username = session.get('username')
         return render_template('prediction_result.html', predicted_label=predicted_label[0], name=session.get('username'), latitude=latitude, longitude=longitude)
 
     if has_exceeded_limit(session.get('username', '')):
@@ -345,7 +356,8 @@ def predict():
         # Handle the GET request
         if not check_logged_in():
             return redirect(url_for('app_rf.login'))
-        return render_template('prediction.html', latitude=latitude, longitude=longitude)
+        username = session.get('username')
+        return render_template('prediction.html', latitude=latitude, longitude=longitude, name=username)
 
 
     
@@ -361,6 +373,7 @@ def username_exists(username, latitude, longitude):
 @app_rf.route('/user_data')
 def user_data():
     if not check_logged_in():
+        name = session.get('username')
         return redirect(url_for('app_rf.login'))
 
     conn = sqlite3.connect('rf_folder/prediction.db')
@@ -371,7 +384,7 @@ def user_data():
     username = request.form.get('username')
 
 
-    return render_template('user_data.html', user_data=user_data, name=username)
+    return render_template('user_data.html', user_data=user_data, user=name)
 
 @app_rf.route('/clear_database', methods=['GET', 'POST'])
 def clear_database():

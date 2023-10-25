@@ -41,9 +41,12 @@
             <nav class="navbar navbar-expand-lg navbar-light">
                 <div class="container">
                     <a class="navbar-brand bg-transparent" href="#">
-                        <img src="/static/images/Green_Nature_Logo-removebg-preview.png" style="background-color: #fff;"
-                            alt="Logo" width="50" height="50" class="d-inline-block px-1 align-text-top">
-                    </a>
+                        <div style="display: flex; align-items: center;">
+                            <img src="/static/images/Green_Nature_Logo-removebg-preview.png" style="background-color: #fff;"
+                                alt="Logo" width="50" height="50" class="d-inline-block px-1 align-text-top">
+                            <span class="mx-1 text-white">User: <b style="color: gold;">{{name}}</b></span>
+                        </div>
+                                        </a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
