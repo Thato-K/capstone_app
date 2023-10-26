@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "undefined/subscriptions/2b674667-0e4a-4d40-af88-a2946c0f8590/resourceGroups/capstone-group-15/providers/Microsoft.Web/sites/capstone-group-15",
+    "appService.deploySubpath": "."
+}
