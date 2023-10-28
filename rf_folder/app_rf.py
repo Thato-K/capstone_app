@@ -51,7 +51,8 @@ def upload_file():
 
 @app_rf.route("/map")
 def map():
-     return render_template("map.html")
+     username = session.get('username')
+     return render_template("map.html", name=username)
 
 @app_rf.route('/get_soil_samples', methods=['GET'])
 def get_soil_samples():
@@ -372,8 +373,9 @@ def username_exists(username, latitude, longitude):
 
 @app_rf.route('/user_data')
 def user_data():
+    name = session.get('username')
+    
     if not check_logged_in():
-        name = session.get('username')
         return redirect(url_for('app_rf.login'))
 
     conn = sqlite3.connect('rf_folder/prediction.db')
@@ -381,9 +383,6 @@ def user_data():
     c.execute('SELECT * FROM user_data WHERE username=?', (session['username'],))
     user_data = c.fetchall()
     conn.close()
-    username = request.form.get('username')
-
-
     return render_template('user_data.html', user_data=user_data, user=name)
 
 @app_rf.route('/clear_database', methods=['GET', 'POST'])
@@ -427,5 +426,4 @@ def init_db():
 if __name__ == '__main__':
     init_db()
     app_rf.run(debug=False)
-
 

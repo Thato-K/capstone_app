@@ -33,8 +33,12 @@
             <nav class="navbar navbar-expand-lg navbar-light">
                 <div class="container">
                     <a class="navbar-brand bg-transparent" href="#">
-                        <img src="/static/images/Green_Nature_Logo-removebg-preview.png" style="background-color: #fff;"
-                            alt="Logo" width="50" height="50" class="d-inline-block px-1 align-text-top">
+                        <div style="display: flex; align-items: center;">
+                            <img src="/static/images/Green_Nature_Logo-removebg-preview.png"
+                                style="background-color: #fff;" alt="Logo" width="50" height="50"
+                                class="d-inline-block px-1 align-text-top">
+                            <span class="mx-1 text-white">User: <b style="color: gold;">{{usr}}</b></span>
+                        </div>
                     </a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -93,59 +97,72 @@
         <hr>
 
         <form action="{{ url_for('app_ann.input') }}" method="POST">
-            <div class="container text-center">
-                <h2 class="my-3"><i class="fa-solid fa-keyboard"></i> Input Values</h2>
+            <div class="container my-4 text-center">
+                <span class="fw-bold"><i class="fa-solid fa-globe me-2"></i> Coordinates
+                    <em class="mx-2" style="font: 5px; font-weight: normal;">(Decimal Degrees)</em></span>
                 <div class="input-group rounded">
-                    <span class="input-group-text fw-bold"><i class="fa-solid fa-globe me-2"></i> Coordinates <em
-                            class="mx-2" style="font: 5px; font-weight: normal;">(Decimal Degrees)</em></span>
-
+                    
                     <div class="form-floating">
-                        <input type="text" class="form-control fw-light" id="lat" name="lat">
-                        <label for="lat">Latitude</label>
+                        <input type="text" placeholder="latitude" class="form-control fw-light" id="lat" name="lat">
+                        <label style="font-weight: normal;" for="lat">Latitude</label>
                     </div>
                     <div class="form-floating">
-                        <input type="text" class="form-control" id="long" name="long">
-                        <label for="long">Longitude</label>
+                        <input type="text" placeholder="longitude" class="form-control" id="long" name="long">
+                        <label style="font-weight: normal;" for="long">Longitude</label>
+
                     </div>
                 </div>
             </div>
 
-            <h4 class="my-4 text-center">Heavy Metal Concentrations (mg/kg)</h4>
-            <div class="row">
-                <div class="col-md-3 mx-auto ml-2 mr-2">
-                    <label for="cd_value" class="form-label text-center">Cadmium (Cd):</label>
-                    <input type="text" class="form-control" id="cd" name="cd">
+            <div class="text-center fw-bold"><i class="fa-solid fa-flask-vial"></i> Metal Concentrations
+                <em class="mx-2" style="font: 5px; font-weight: normal;">(mg/kg)</em></div>
+            <div class="input-group rounded">
+               
+                <div class="form-floating">
+                    <input type="text" class="form-control fw-bold" id="cd" placeholder="Cadmium Concentration"
+                        name="cd">
+                    <label style="font-weight: normal;" for="cd">Cadmium</label>
                 </div>
-                <div class="col-md-3 mx-auto ml-2 mr-2">
-                    <label for="cr_value" class="form-label">Chromium (Cr):</label>
-                    <input type="text" class="form-control" id="cr" name="cr">
+                <div class="form-floating">
+                    <input type="text" class="form-control fw-bold" placeholder="Chromium Concentration" id="cr"
+                        name="cr">
+                    <label style="font-weight: normal;" for="cr">Chromium</label>
                 </div>
-                <div class="col-md-3 mx-auto ml-2 mr-2">
-                    <label for="ni_value" class="form-label">Nickel (Ni):</label>
-                    <input type="text" class="form-control" id="ni" name="ni">
+                <div class="form-floating">
+                    <input type="text" class="form-control fw-bold" placeholder="Nickel Concentration" id="ni"
+                        name="ni">
+                    <label style="font-weight: normal;" for="ni">Nickel</label>
+                </div>
+
+            </div>
+
+            <br>
+            <br>
+
+            <div class="input-group rounded">
+                <div class="form-floating">
+                    <input type="text" class="form-control fw-bold" id="pb" placeholder="Lead Concentration"
+                        name="pb">
+                    <label style="font-weight: normal;" for="pb">Lead</label>
+                </div>
+                <div class="form-floating">
+                    <input type="text" class="form-control fw-bold" placeholder="Zinc Concentration" id="zn"
+                        name="zn">
+                    <label style="font-weight: normal;" for="zn">Zinc</label>
+                </div>
+                <div class="form-floating">
+                    <input type="text" class="form-control fw-bold" placeholder="Copper Concentration" id="cu"
+                        name="cu">
+                    <label style="font-weight: normal;" for="cu">Copper</label>
+                </div>
+                <div class="form-floating">
+                    <input type="text" class="form-control fw-bold" placeholder="Cobalt Concentration" id="co"
+                        name="co">
+                    <label style="font-weight: normal;" for="co">Cobalt</label>
                 </div>
             </div>
 
-            <div class="row mt-4">
-                <div class="col-md-3 mx-auto ml-2 mr-2">
-                    <label for="pb_value" class="form-label">Lead (Pb):</label>
-                    <input type="text" class="form-control" id="pb" name="pb">
-                </div>
-                <div class="col-md-3 mx-auto ml-2 mr-2">
-                    <label for="zn_value" class="form-label">Zinc (Zn):</label>
-                    <input type="text" class="form-control" id="zn" name="zn">
-                </div>
-                <div class="col-md-3 mx-auto ml-2 mr-2">
-                    <label for="cu_value" class="form-label">Copper (Cu):</label>
-                    <input type="text" class="form-control" id="cu" name="cu">
-                </div>
-                <br>
-                <br>
-            </div>
-            <div class="col-md-3 my-4 mx-auto">
-                <label for="co_value" class="form-label">Cobalt (Co):</label>
-                <input type="text" class="form-control" id="co" name="co">
-            </div>
+            <br>
             <br>
 
 

@@ -50,8 +50,11 @@
             <nav class="navbar navbar-expand-lg navbar-light">
                 <div class="container">
                     <a class="navbar-brand bg-transparent" href="#">
-                        <img src="/static/images/Green_Nature_Logo-removebg-preview.png" style="background-color: #fff;"
-                            alt="Logo" width="50" height="50" class="d-inline-block px-1 align-text-top">
+                        <div style="display: flex; align-items: center;">
+                            <img src="/static/images/Green_Nature_Logo-removebg-preview.png" style="background-color: #fff;"
+                                alt="Logo" width="50" height="50" class="d-inline-block px-1 align-text-top">
+                            <span class="mx-1 text-white">User: <b style="color: gold;">{{usr}}</b></span>
+                        </div> 
                     </a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -97,7 +100,7 @@
             <div class="carousel-item active">
                 <img src="/static/images/slide1.png" class="d-block w-100" alt="...">
                 <div class="carousel-caption d-none d-md-block my-auto mx-auto text-white">
-                    <h1 class="text-center mt-0 mb-3">Hello, <span class="fw-bold bg-warning px-1 py-1 rounded">{{ name
+                    <h1 class="text-center mt-0 mb-3">Hello, <span class="fw-bold bg-warning px-1 py-1 rounded">{{ usr
                             }}</span>! </h1>
                     <h3 class="text-center mb-3">Welcome to
                         <b>GROUP 15's</b> capstone project web application.
@@ -109,7 +112,7 @@
             <div class="carousel-item">
                 <img src="/static/images/Untitled-design.png" class="d-block w-100" alt="...">
                 <div class="carousel-caption d-none d-md-block my-auto text-white">
-                    <h1 class="text-center mt-0 mb-3">Hello, <span class="fw-bold bg-warning px-1 py-1 rounded">{{ name
+                    <h1 class="text-center mt-0 mb-3">Hello, <span class="fw-bold bg-warning px-1 py-1 rounded">{{ usr
                             }}</span>! </h1>
                     <h3 class="text-center mb-3">Welcome to
                         <b>GROUP 15's</b> capstone project web application.
@@ -121,7 +124,7 @@
             <div class="carousel-item">
                 <img src="/static/images/Untitled design (1).png" class="d-block w-100" alt="...">
                 <div class="carousel-caption d-none d-md-block my-auto text-white">
-                    <h1 class="text-center mt-0 mb-3">Hello, <span class="fw-bold bg-warning px-1 py-1 rounded">{{ name
+                    <h1 class="text-center mt-0 mb-3">Hello, <span class="fw-bold bg-warning px-1 py-1 rounded">{{ usr
                             }}</span>! </h1>
                     <h3 class="text-center mb-3">Welcome to
                         <b>GROUP 15's</b> capstone project web application.
@@ -133,7 +136,7 @@
             <div class="carousel-item">
                 <img src="/static/images/contamination.png" class="d-block w-100" alt="...">
                 <div class="carousel-caption d-none d-md-block my-auto text-white">
-                    <h1 class="text-center mt-0 mb-3">Hello, <span class="fw-bold bg-warning px-1 py-1 rounded">{{ name
+                    <h1 class="text-center mt-0 mb-3">Hello, <span class="fw-bold bg-warning px-1 py-1 rounded">{{ usr
                             }}</span>! </h1>
                     <h3 class="text-center mb-3">Welcome to
                         <b>GROUP 15's</b> capstone project web application.

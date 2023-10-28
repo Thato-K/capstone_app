@@ -99,16 +99,19 @@
                 <div class="input-group">
                     <input type="file" class="form-control fw-bold" name="file" id="fileInput"
                         aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+                        <br>
                     <button class="btn btn-secondary fw-bold" type="submit" id="inputGroupFileAddon04"><i
                             class="fa-solid fa-upload"></i> Upload</button>
                 </div>
             </form>
 
+<div class="text-center">
+    <div  id="download-container"></div>
 
-            <div id="download-container"></div>
 
+    <div id="progress"></div>
+</div>
 
-            <div id="progress"></div>
             </form>
 
             <form action="{{ url_for('app_rf.user_data') }}">
