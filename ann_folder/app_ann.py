@@ -60,7 +60,7 @@ def login():
              return render_template("index-login.html", mesg=message)
      else:
           return render_template("index-login.html")
-     
+    
 @app_ann.route("/logout", methods=['POST', 'GET'])
 def logout():
     try:

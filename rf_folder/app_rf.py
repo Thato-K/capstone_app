@@ -189,7 +189,7 @@ def clear_workspace():
         clear_user_workspace()  # Call the function to clear the database
 
         session.pop('username', None)  # Clear the session
-        return redirect(url_for('app_rf.login'))
+        # return redirect(url_for('app_rf.login'))
 
     return render_template('clear_workspace.html')
 
