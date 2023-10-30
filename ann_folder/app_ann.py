@@ -124,7 +124,7 @@ def map():
     try:
          if session['username']:
             user = session['username']
-            return render_template("index-Gis-map.html", usr=user)
+            return render_template("index-GIS-map.html", usr=user)
          else:
              return "User is not logged in!"
     except KeyError:
