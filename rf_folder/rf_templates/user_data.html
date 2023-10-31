@@ -93,10 +93,6 @@
                 <button class="btn btn-sm btn-success fw-bold">Download User Data <i class="fa-solid fa-download"></i></button>
                 <br>
             </form> 
-            <form action="{{ url_for('app_rf.predict') }}">
-                <br>
-                <button class="btn btn-sm btn-primary fw-bold">Predict Again</button>
-            </form> 
             <div class="container text-center">
                 <p class="mt-1">Do you want to clear your workspace? If yes, click the button below.</p>
                 <form action="{{ url_for('app_rf.clear_database') }}" method="post">
@@ -104,7 +100,10 @@
                 </form>
             </div>
         {% endif %}
-        
+        <form action="{{ url_for('app_rf.predict') }}">
+            <br>
+            <button class="btn btn-sm btn-primary fw-bold">Predict Again</button>
+        </form> 
     
         </div>
     
