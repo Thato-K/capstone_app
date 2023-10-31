@@ -1,4 +1,12 @@
-from flask import Blueprint, render_template, request, redirect, url_for, session, send_file, jsonify, current_app
+from flask import Blueprint, render_template, request, redirect, url_for, session, send_file, jsonify, current_app, make_response
+from io import BytesIO
+from reportlab.lib.pagesizes import landscape, letter
+from reportlab.lib import colors
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.enums import TA_CENTER
+from reportlab.lib.fonts import addMapping
+from reportlab.platypus import Spacer
 import sqlite3
 import pandas as pd
 import pickle
@@ -188,10 +196,7 @@ def clear_workspace():
     if request.method == 'POST':
         clear_user_workspace()  # Call the function to clear the database
 
-        session.pop('username', None)  # Clear the session
-        # return redirect(url_for('app_rf.login'))
-
-    return render_template('clear_workspace.html')
+    return render_template('index.html')
 
 
 def check_logged_in():
@@ -292,6 +297,78 @@ def prediction_result():
 
     return redirect(url_for('app_rf.predict'))
 
+@app_rf.route('/download_user_data')
+def download_user_data():
+    # Check if the user is logged in; if not, redirect to the login page
+    if not check_logged_in():
+        return redirect(url_for('app_rf.login'))
+
+    # Retrieve the manually inputted data from the database
+    conn = sqlite3.connect('rf_folder/prediction.db')
+    c = conn.cursor()
+    c.execute('SELECT * FROM user_data WHERE username=?', (session['username'],))
+    user_data = c.fetchall()
+    conn.close()
+
+    # Check if there is no data available for download
+    if not user_data:
+        return render_template('error.html', message="No data available for download.")
+
+    # Create a Pandas DataFrame from the data
+    df = pd.DataFrame(user_data, columns=['Pred No.', 'User', 'Latitude', 'Longitude', 'Cadmium', 'Chromium', 'Nickel', 'Lead', 'Zinc', 'Copper', 'Cobalt', 'Contamination Level'])
+
+    # Create a PDF buffer to hold the PDF data
+    pdf_buffer = BytesIO()
+
+    # Create the PDF document with landscape orientation
+    doc = SimpleDocTemplate(pdf_buffer, pagesize=landscape(letter))
+
+    # Create a list to hold the data for the table
+    data = [df.columns.tolist()]  # Add column headers
+    for index, row in df.iterrows():
+        data.append(row.tolist())  # Add rows of data
+
+    # Create a table with the data
+    table = Table(data)
+
+    # Add style to the table
+    style = TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+        ('GRID', (0, 0), (-1, -1), 1, colors.black)
+    ])
+    table.setStyle(style)
+
+    # Define a paragraph style for the text
+    styles = getSampleStyleSheet()
+    text_style = styles['Normal']
+    text_style.alignment = TA_CENTER  # Center-justify the text
+    text_style.fontName = 'Helvetica-Bold'  # Set the text to bold
+
+    # Create a Paragraph with the text
+    username = session.get('username')
+    text = Paragraph("<h1>This table displays contamination levels of soil samples collected by {}:</h1>".format(username), text_style)  # Use "<b>...</b>" for bold
+
+# Create a spacer to add space between text and table
+    spacer = Spacer(1, 20)  # Adjust the space (20 points in this example)
+
+    # Build the PDF document
+    elements = [text, spacer, table]
+    doc.build(elements)
+
+    # Reset the buffer for reading
+    pdf_buffer.seek(0)
+
+    # Serve the PDF as a view-only PDF
+    response = make_response(pdf_buffer.read())
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = f'inline; filename=user_data_{session["username"]}.pdf'
+    return response
+
 @app_rf.route('/predict', methods=['GET', 'POST'])
 def predict():
     latitude = None
@@ -390,8 +467,7 @@ def clear_database():
     if request.method == 'POST':
         clear_user_workspace()  # Call the function to clear the database
 
-        session.pop('username', None)  # Clear the session
-        return redirect(url_for('app_rf.login'))
+        return redirect(url_for('app_rf.index'))
 
     # Check if the database is empty
     conn = sqlite3.connect('rf_folder/prediction.db')

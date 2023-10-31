@@ -235,8 +235,15 @@
                 </div>
             </div>
 
+
+
         </div>
         <br>
+        <div class="container text-center">
+            <form action="{{ url_for('app_rf.clear_database') }}" method="post">
+                <button class="btn btn-danger btn-sm" type="submit">Remove Map Coordinates</button>
+            </form>
+        </div>
         <br>
     <div class="container text-center">
         <h3 class="text-center">Alternatively, you can create your own map <b>showing spatial distribution</b> using <u><em>ArcGIS</em></u>.</h3>
@@ -246,6 +253,7 @@
             </a>
     </div>
     </div>
+
 
 
     <div>

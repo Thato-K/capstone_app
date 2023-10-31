@@ -13,6 +13,7 @@ document.addEventListener("alpine:init", () => {
       table_2: false,
       input: true,
       legend: false,
+      tools: false,
 
     }
   })

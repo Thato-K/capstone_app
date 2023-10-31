@@ -81,6 +81,36 @@
         </header>
     </div>
 
+    <div class="container"  x-show="!tools">
+        <button class="btn btn-sm btn-dark fw-bold" x-on:click="tools =! tools">Show Tools</button>
+    </div>
+    <div class="container" x-show="tools">
+        <button class="btn btn-sm btn-dark fw-bold" x-on:click="tools =! tools">Hide Tools</button>
+        <div class="container text-center">
+            {% if user_data %}
+            <form action="{{ url_for('app_rf.download_user_data') }}">
+                <br>
+                <button class="btn btn-sm btn-success fw-bold">Download User Data <i class="fa-solid fa-download"></i></button>
+                <br>
+            </form> 
+            <form action="{{ url_for('app_rf.predict') }}">
+                <br>
+                <button class="btn btn-sm btn-primary fw-bold">Predict Again</button>
+            </form> 
+            <div class="container text-center">
+                <p class="mt-1">Do you want to clear your workspace? If yes, click the button below.</p>
+                <form action="{{ url_for('app_rf.clear_database') }}" method="post">
+                    <button class="btn btn-danger btn-sm" type="submit">Clear Workspace</button>
+                </form>
+            </div>
+        {% endif %}
+        
+    
+        </div>
+    
+    </div>
+    
+
 
     <h3 class="text-center">User input values</h3>
     <div class="container">
@@ -119,18 +149,9 @@
                 </tbody>
             </table>
         </div>
-        <div class="container text-center">
-            <p class="mt-5">Do you want to clear your workspace? If yes, click the button below.</p>
-            <form action="{{ url_for('app_rf.clear_database') }}" method="post">
-                <button class="btn btn-danger btn-sm" type="submit">Clear Workspace</button>
-            </form>
-        </div>
+
     </div>
 
-    <div class="container text-center my-4">
-        <form action="{{ url_for('app_rf.predict') }}">
-            <input type="submit" class="btn btn-primary" value="Input Values">
-        </form>
     </div>
 
     <div>

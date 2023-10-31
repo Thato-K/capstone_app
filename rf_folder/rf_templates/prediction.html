@@ -266,7 +266,8 @@
                     if (response.result_filename) {
                         // Display a download button
                         const downloadButton = document.createElement('a');
-                        downloadButton.href = `{{ url_for('app_rf.download_result', result_filename='')}}${response.result_filename}`;
+                        // downloadButton.href = `{{ url_for('app_rf.download_result', result_filename='')}}${response.result_filename}`;
+                        downloadButton.href = `{{ url_for('app_rf.download_user_data') }}`;
                         downloadButton.innerHTML = '<b>Download Results</b> <i class="fa-solid fa-download"></i>';
                         downloadButton.className = 'download-button';
                         document.getElementById('download-container').appendChild(downloadButton);
